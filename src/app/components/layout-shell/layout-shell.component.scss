@@ -1,0 +1,275 @@
+/* 1. MAIN GRID LAYOUT */
+.app-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  transition: grid-template-columns 0.3s ease;
+
+  &.sidebar-hidden {
+    grid-template-columns: 0px 1fr;
+
+    .sidebar {
+      transform: translateX(-100%);
+      visibility: hidden; 
+    }
+  }
+}
+
+/* 2. SIDEBAR STYLING */
+.sidebar {
+  background-color: var(--color-white);
+  border-right: 1px solid var(--color-lines-light);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0; 
+  transition: transform 0.3s ease, visibility 0.3s;
+  overflow: hidden; 
+  position: relative;
+  z-index: 100;
+
+  .logo-container {
+    padding: 0 32px;
+    margin-bottom: 54px;
+  }
+
+  .nav-label {
+    color: var(--color-medium-grey);
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    font-weight: bold;
+    padding: 0 32px;
+    margin-bottom: 20px;
+  }
+
+  .board-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 4px;
+      display: flex;
+    }
+
+    li a, .btn-create-board {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      white-space: nowrap;
+      
+      width: 240px;
+      padding: 14px 0 14px 32px;
+      white-space: nowrap;
+      border-radius: 0 100px 100px 0; 
+      
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+      color: var(--color-medium-grey);
+      transition: all 0.4s ease;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+
+      &.active-link {
+        background-color: var(--color-main-purple);
+        color: var(--color-white);
+        img { filter: brightness(0) invert(1); }
+      }
+
+      &:hover:not(.active-link) {
+        
+        background-color: var(--color-light-grey); 
+        color: var(--color-main-purple);
+      }
+    }
+
+    .btn-create-board {
+      color: var(--color-main-purple);
+    }
+  }
+}
+
+/* 3. SIDEBAR FOOTER (Theme & Hide) */
+.sidebar-footer {
+  margin-top: auto;
+  padding: 0 24px;
+
+  .theme-toggle {
+    background-color: var(--color-light-grey);
+    height: 48px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 8px;
+  }
+
+  .hide-sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 8px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--color-medium-grey);
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    
+    &:hover { color: var(--color-main-purple); }
+  }
+}
+
+/* 4. MAIN HEADER STYLING */
+.main-header {
+  height: 96px;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-lines-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    .mobile-logo { display: none; }
+    .board-title { font-size: 24px; margin: 0; font-weight: bold; }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+/* 5. FLOATING SHOW SIDEBAR EYE */
+.show-sidebar-floating-btn {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  width: 56px;
+  height: 48px;
+  background-color: var(--color-main-purple);
+  border: none;
+  border-radius: 0 100px 100px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50; 
+  
+  &:hover { background-color: var(--color-main-purple-hover); }
+}
+
+/* 6. CONTENT AREA */
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  background-color: var(--color-light-grey);
+  overflow: auto;
+  padding: 24px;
+}
+
+/* 7. RESPONSIVE QUERIES */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr; 
+  }
+  .sidebar { display: none; }
+  .main-header {
+    height: 64px;
+    padding: 0 16px;
+    .header-left {
+      .mobile-logo { display: block; }
+      .board-title { font-size: 18px; }
+    }
+  }
+}
+
+.btn-primary-l {
+  background-color: var(--color-main-purple);
+  color: var(--color-white);
+  border: none;
+  padding: 15px 24px;
+  border-radius: 24px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-main-purple-hover);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}
+
+.options-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 5px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  img {
+    /* Based on Figma dimensions */
+    height: 20px; 
+    width: auto;
+  }
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  background-color: var(--color-main-purple);
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: background-color 0.4s;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: background-color 0.3s;
+
+  .toggle-circle {
+    width: 14px;
+    height: 14px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.active .toggle-circle {
+    transform: translateX(25px); 
+  }
+
+  &:hover {
+    background-color: var(--color-main-purple-hover);
+  }
+}

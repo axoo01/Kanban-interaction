@@ -1,1 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Main Colors */
+  --color-main-purple: #635FC7;
+  --color-main-purple-hover: #A8A4FF;
+  --color-black: #000112;
+  --color-very-dark-grey: #20212C;
+  --color-dark-grey: #2B2C37;
+  --color-lines-dark: #3E3F4E;
+  --color-medium-grey: #828FA3;
+  --color-lines-light: #E4EBFA;
+  --color-light-grey: #F4F7FD;
+  --color-white: #FFFFFF;
+  --color-red: #EA5555;
+  --color-red-hover: #FF9898;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Add this below your :root variables */
+.dark-theme {
+  --color-white: #2B2C37;        
+  --color-light-grey: #20212C;   
+  --color-black: #FFFFFF;        
+  --color-lines-light: #3E3F4E;  
+  
+  
+}
+
+
+
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background-color: var(--color-light-grey);
+  color: var(--color-black);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Responsive Utilities */
+.mobile-only {
+  display: block;
+}
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+  .desktop-only {
+    display: block !important;
+  }
+}

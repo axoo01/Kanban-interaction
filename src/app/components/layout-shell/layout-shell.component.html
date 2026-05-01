@@ -1,34 +1,91 @@
-<nav class="sidebar">
-  <img src="/assets/logo-dark.svg" alt="Kanban Logo">
+<div class="app-container" [class.sidebar-hidden]="isSidebarHidden()">
   
-  <p>ALL BOARDS (3)</p>
-  <ul>
-    <li>
-      <a routerLink="/boards" 
-         routerLinkActive="active-link" 
-         [routerLinkActiveOptions]="{ exact: true }">
-         <img src="/assets/icon-board.svg"> All Boards
-      </a>
-    </li>
-    <li>
-      <a routerLink="/settings" 
-         routerLinkActive="active-link">
-         <img src="/assets/icon-board.svg"> Settings
-      </a>
-    </li>
-    <li>
-    <a routerLink="/boards/platform-launch" routerLinkActive="active-link">
-        <img src="/assets/icon-board.svg"> Platform Launch
-    </a>
-    </li>
-    <li>
-    <a routerLink="/boards/marketing-plan" routerLinkActive="active-link">
-        <img src="/assets/icon-board.svg"> Marketing Plan
-    </a>
-    </li>
-  </ul>
-</nav>
+  <aside class="sidebar" role="navigation">
+    <div class="logo-container">
+      <img [src]="isDarkMode() ? '/assets/logo-light.svg' : '/assets/logo-dark.svg'" 
+          alt="Kanban Logo" 
+          class="logo">
+    </div>
 
-<main>
-  <router-outlet />
-</main>
+    <div class="nav-links">
+      <p class="nav-label">ALL BOARDS (3)</p>
+      
+      <ul class="board-list">
+        <li>
+          <a routerLink="/boards/platform-launch" routerLinkActive="active-link">
+            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+            Platform Launch
+          </a>
+        </li>
+        <li>
+          <a routerLink="/boards/marketing-plan" routerLinkActive="active-link">
+            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+            Marketing Plan
+          </a>
+        </li>
+        <li>
+          <a routerLink="/boards/roadmap" routerLinkActive="active-link">
+            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+            Roadmap
+          </a>
+        </li>
+        <li>
+          <button class="btn-create-board">
+            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+            + Create New Board
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="theme-toggle">
+        <img src="/assets/icon-light-theme.svg" alt="Light Theme">
+        
+        <div class="toggle-switch" (click)="toggleTheme()" [class.active]="isDarkMode()">
+          <div class="toggle-circle"></div>
+        </div>
+        
+        <img src="/assets/icon-dark-theme.svg" alt="Dark Theme">
+      </div>
+
+      <button class="hide-sidebar-btn" (click)="toggleSidebar()">
+        <img src="/assets/icon-hide-sidebar.svg" alt="">
+        Hide Sidebar
+      </button>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    
+    <header class="main-header">
+      <div class="header-left">
+        <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo">
+        
+        <h1 class="board-title">Platform Launch</h1>
+      </div>
+
+      <div class="header-right">
+        <button class="btn-primary-l">
+          <span class="desktop-only">+ Add New Task</span>
+          <img src="/assets/icon-add-task-mobile.svg" class="mobile-only" alt="">
+        </button>
+        
+        <button class="options-btn" aria-label="Board options">
+          <img src="/assets/icon-vertical-ellipsis.svg" alt="">
+        </button>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <router-outlet />
+    </main>
+
+  </div>
+
+  @if (isSidebarHidden()) {
+    <button class="show-sidebar-floating-btn" (click)="toggleSidebar()" aria-label="Show Sidebar">
+      <img src="/assets/icon-show-sidebar.svg" alt="">
+    </button>
+  }
+</div>
