@@ -5,7 +5,7 @@ A modern Kanban task management application built with **Angular 19+** and **SCS
 ## Live Demo
 **[Click here to view the live site](https://kanban-task-mgt.netlify.app/boards/roadmap)**
 
----
+
 
 ## ✨ Features Implemented
 - **Hierarchical Project Management:** Organizes work into distinct Boards, each containing customizable columns (Todo, Doing, Done) and task cards.
@@ -16,11 +16,4 @@ A modern Kanban task management application built with **Angular 19+** and **SCS
 
 - **Personalized Environment:** Real-time theme switching (Light/Dark mode) with persistent state across the application shell.
 
----
-
-## Tech Stack
-- **Frontend:** Angular (Standalone Components, Signals, Computed properties)
-- **Styling:** SCSS (CSS Variables, Flexbox, CSS Grid)
-- **Deployment:** Netlify (Continuous Deployment via GitHub)
-- **Design Source:** Figma
 
