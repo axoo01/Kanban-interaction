@@ -1,11 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-board-details',
-  imports: [],
-  templateUrl: './board-details.component.html',
-  styleUrl: './board-details.component.scss'
+  standalone: true,
+  template: `
+    <section>
+      <h1>Board ID: {{ id() }}</h1>
+      <p>Logic to fetch data for this specific board goes here.</p>
+    </section>
+  `
 })
 export class BoardDetailsComponent {
-
+  // This signal will automatically update whenever the URL :id changes!
+  id = input.required<string>(); 
 }
