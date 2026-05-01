@@ -7,7 +7,7 @@ A modern Kanban task management application built with **Angular 19+** and **SCS
 
 
 
-## ✨ Features Implemented
+## Features Implemented
 - **Hierarchical Project Management:** Organizes work into distinct Boards, each containing customizable columns (Todo, Doing, Done) and task cards.
 
 - **Dynamic Routing & Navigation:** Seamlessly switches between project contexts using URL-driven state, allowing for bookmarkable board views.
