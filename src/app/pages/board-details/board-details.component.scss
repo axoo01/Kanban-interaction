@@ -1,0 +1,101 @@
+.board-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+/* EMPTY STATE */
+.empty-board {
+  margin: auto;
+  text-align: center;
+  p {
+    color: var(--color-medium-grey);
+    margin-bottom: 32px;
+    font-size: 18px;
+  }
+}
+
+/* POPULATED STATE */
+.columns-grid {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  overflow-x: auto;
+  width: 100%;
+
+  .column {
+    min-width: 280px;
+    width: 280px;
+
+    .column-title {
+      font-size: 12px;
+      letter-spacing: 2.4px;
+      color: var(--color-medium-grey);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .dot {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: var(--color-main-purple); 
+
+        /* Specific Status Colors */
+        &.todo  { background-color: #49C4E5; }
+        &.doing { background-color: #8471F2; }
+        &.done  { background-color: #67E2AE; }
+        
+        /* Fallback for custom columns */
+        &.custom { background-color: var(--color-main-purple); }
+        }
+    }
+  }
+}
+
+/* TASK CARD */
+.task-card {
+  background-color: var(--color-white);
+  padding: 23px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(54, 78, 126, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: var(--color-black);
+  }
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-medium-grey);
+    font-weight: bold;
+  }
+
+  &:hover h3 {
+    color: var(--color-main-purple);
+  }
+}
+
+/* NEW COLUMN PLACEHOLDER */
+.new-column-placeholder {
+  min-width: 280px;
+  background: linear-gradient(180deg, rgba(228, 235, 250, 0.5) 0%, rgba(228, 235, 250, 0) 100%);
+  border-radius: 6px;
+  margin-top: 39px; // Align with tasks
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  span {
+    color: var(--color-medium-grey);
+    font-size: 24px;
+    font-weight: bold;
+  }
+}

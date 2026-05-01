@@ -1,59 +1,26 @@
-# KanbanTaskManagement
+# Kanban Task Management Web App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.23.
+A modern Kanban task management application built with **Angular 19+** and **SCSS**. This application enables users to manage complex projects through multiple boards, categorized task columns, and a responsive interface designed for professional productivity. featuring a robust routing architecture and reactive state management.
 
-## Development server
+## Live Demo
+**[Click here to view the live site](YOUR_NETLIFY_URL_HERE)**
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## ✨ Features Implemented
+- **Hierarchical Project Management:** Organizes work into distinct Boards, each containing customizable columns (Todo, Doing, Done) and task cards.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Dynamic Routing & Navigation:** Seamlessly switches between project contexts using URL-driven state, allowing for bookmarkable board views.
 
-## Code scaffolding
+- **State-Aware UI:** Features a retractable sidebar and a persistent header that adapts to the current board's metadata.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Personalized Environment:** Real-time theme switching (Light/Dark mode) with persistent state across the application shell.
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Tech Stack
+- **Frontend:** Angular (Standalone Components, Signals, Computed properties)
+- **Styling:** SCSS (CSS Variables, Flexbox, CSS Grid)
+- **Deployment:** Netlify (Continuous Deployment via GitHub)
+- **Design Source:** Figma
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

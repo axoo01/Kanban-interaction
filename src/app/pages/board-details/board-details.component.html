@@ -1,1 +1,33 @@
-<p>board-details works!</p>
+<div class="board-container">
+  
+  @if (currentBoard()?.columns?.length === 0) {
+    <div class="empty-board">
+      <p>This board is empty. Create a new column to get started.</p>
+      <button class="btn-primary-l">+ Add New Column</button>
+    </div>
+  } @else {
+    <div class="columns-grid">
+      @for (column of currentBoard()?.columns; track column.name) {
+        <section class="column">
+          <h2 class="column-title">
+            <span class="dot" [ngClass]="getColumnColorClass(column.name)"></span>
+            {{ column.name }} ({{ column.tasks.length }})
+          </h2>
+
+          <div class="task-list">
+            @for (task of column.tasks; track task.title) {
+              <div class="task-card">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.subtasks.length }} subtasks</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <div class="new-column-placeholder">
+        <span>+ New Column</span>
+      </div>
+    </div>
+  }
+</div>
