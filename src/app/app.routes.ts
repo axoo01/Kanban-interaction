@@ -1,36 +1,39 @@
 import { Routes } from '@angular/router';
 import { LayoutShellComponent } from './components/layout-shell/layout-shell.component';
-import { BoardListComponent } from './pages/board-list/board-list.component';
-import { BoardDetailsComponent } from './pages/board-details/board-details.component';
-import { SettingsComponent } from './pages/settings/settings.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutShellComponent,
     children: [
-      { 
-        path: '', 
-        redirectTo: 'boards', 
-        pathMatch: 'full' 
+      {
+        path: '',
+        redirectTo: 'boards',
+        pathMatch: 'full'
       },
-      { 
-        path: 'boards', 
-        component: BoardListComponent 
+      {
+        path: 'boards',
+        loadComponent: () => import('./pages/board-list/board-list.component').then(m => m.BoardListComponent)
       },
-      { 
-        path: 'boards/:id', 
-        component: BoardDetailsComponent 
+      {
+        path: 'boards/:id',
+        loadComponent: () => import('./pages/board-details/board-details.component').then(m => m.BoardDetailsComponent),
+        // Child routes inside a specific board
+        children: [
+          {
+            path: 'tasks/:taskId',
+            loadComponent: () => import('./pages/task-detail/task-detail.component').then(m => m.TaskDetailComponent)
+          }
+        ]
       },
-      { 
-        path: 'settings', 
-        component: SettingsComponent 
-      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+      }
     ]
   },
-  { 
-    path: '**', 
-    component: NotFoundComponent 
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
 ];
