@@ -1,6 +1,24 @@
-<div class="app-container">
-  <aside>Sidebar Here</aside>
-  <main>
-    <router-outlet />
-  </main>
-</div>
+<nav class="sidebar">
+  <img src="/assets/logo-dark.svg" alt="Kanban Logo">
+  
+  <p>ALL BOARDS (3)</p>
+  <ul>
+    <li>
+      <a routerLink="/boards" 
+         routerLinkActive="active-link" 
+         [routerLinkActiveOptions]="{ exact: true }">
+         <img src="/assets/icon-board.svg"> All Boards
+      </a>
+    </li>
+    <li>
+      <a routerLink="/settings" 
+         routerLinkActive="active-link">
+         <img src="/assets/icon-board.svg"> Settings
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main>
+  <router-outlet />
+</main>
