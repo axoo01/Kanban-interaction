@@ -16,7 +16,7 @@
 
           <div class="task-list">
             @for (task of column.tasks; track task.title) {
-              <div class="task-card">
+              <div class="task-card" (click)="openEditModal(task)">
                 <h3>{{ task.title }}</h3>
                 <p>{{ task.subtasks.length }} subtasks</p>
               </div>

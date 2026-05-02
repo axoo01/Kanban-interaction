@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-layout-shell',
@@ -11,6 +12,7 @@ import { ThemeService } from '../../services/theme.service';
 export class LayoutShellComponent {
   private themeService = inject(ThemeService);
   isDarkMode = this.themeService.darkMode;
+  private dialogService = inject(DialogService);
 
   isSidebarHidden = signal(false);
 
@@ -20,6 +22,9 @@ export class LayoutShellComponent {
 
   toggleTheme() {
     this.themeService.toggleTheme();
+  }
+  openAddTask() {
+    this.dialogService.openAddMode();
   }
 
 }

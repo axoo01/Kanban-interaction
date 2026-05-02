@@ -1,6 +1,7 @@
 import { Component, input, inject, computed } from '@angular/core';
 import { BoardService } from '../../services/board.service';
 import { CommonModule } from '@angular/common';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-board-details',
@@ -10,6 +11,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './board-details.component.scss'
 })
 export class BoardDetailsComponent {
+
+  private dialogService = inject(DialogService);
   private boardService = inject(BoardService);
   id = input.required<string>();
   currentBoard = computed(() => this.boardService.getBoardById(this.id()));
@@ -21,5 +24,9 @@ export class BoardDetailsComponent {
     if (status.includes('doing')) return 'doing';
     if (status.includes('done')) return 'done';
     return 'custom';
+  }
+
+  openEditModal(task: any) {
+    this.dialogService.openEditMode(task);
   }
 }

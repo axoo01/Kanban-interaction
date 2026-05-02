@@ -1,0 +1,132 @@
+/* 1. BACKDROP & CONTENT */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.dialog-content {
+  background-color: var(--color-white);
+  padding: 32px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transition: background-color 0.3s ease;
+
+  /* Use :host-context to reliably detect the body class */
+  :host-context(.dark-theme) & {
+    background-color: #2B2C37;
+    h2 { color: white; }
+  }
+}
+
+.dialog-header {
+  margin-bottom: 24px;
+  h2 { font-size: 18px; margin: 0; color: var(--color-black); }
+}
+
+/* 2. FORM GROUPS & INPUTS */
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--color-medium-grey);
+    margin-bottom: 8px;
+    
+    /* FIX: Ensure label is white in Dark Mode */
+    :host-context(.dark-theme) & {
+      color: white !important;
+    }
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    font-size: 13px;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-family: inherit;
+    outline: none;
+
+    &:focus { border-color: var(--color-main-purple); }
+
+    &.form-error {
+      border-color: var(--color-red) !important;
+    }
+
+    :host-context(.dark-theme) & {
+      background-color: #2B2C37;
+      color: white;
+      border: 1px solid rgba(130, 143, 163, 0.25);
+      &::placeholder { color: rgba(255, 255, 255, 0.25); }
+    }
+  }
+}
+
+/* 3. BUTTONS */
+.btn-secondary-l {
+  width: 100%;
+  padding: 12px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: rgba(99, 95, 199, 0.1); 
+  color: var(--color-main-purple);
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+
+  /* FIX: Explicitly force white background in Dark Mode */
+  :host-context(.dark-theme) & {
+    background-color: white !important;
+    color: var(--color-main-purple);
+  }
+
+  &:hover { opacity: 0.8; }
+}
+
+.submit-btn { width: 100%; }
+
+/* 4. SUBTASK ROW (Kept your working logic) */
+.subtask-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  position: relative;
+  input { flex: 1; }
+
+  .remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    img { width: 15px; opacity: 0.5; }
+    &:hover img { opacity: 1; }
+  }
+}
+
+.error-msg {
+  color: var(--color-red);
+  font-size: 13px;
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
