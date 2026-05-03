@@ -1,1 +1,9 @@
 <router-outlet />
+
+@if (dialogService.state().isOpen) {
+  @if (dialogService.state().type === 'task') {
+    <app-task-form-dialog />
+  } @else {
+    <app-board-form-dialog />
+  }
+}

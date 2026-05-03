@@ -1,19 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router'; // 1. MUST IMPORT THIS
+import { RouterOutlet } from '@angular/router';
 import { TaskFormDialogComponent } from './components/task-form-dialog/task-form-dialog.component';
+import { BoardFormDialogComponent } from './components/board-form-dialog/board-form-dialog.component'; // 1. IMPORT THIS
 import { DialogService } from './services/dialog.service';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  // 2. ADD RouterOutlet to imports
-  imports: [CommonModule, RouterOutlet, TaskFormDialogComponent], 
+  imports: [
+    CommonModule, 
+    RouterOutlet, 
+    TaskFormDialogComponent, 
+    BoardFormDialogComponent // 2. ADD TO IMPORTS
+  ], 
   template: `
     <router-outlet />
 
     @if (dialogService.state().isOpen) {
-      <app-task-form-dialog />
+      @if (dialogService.state().type === 'task') {
+        <app-task-form-dialog />
+      } @else {
+        <app-board-form-dialog />
+      }
     }
   `,
   styleUrl: './app.component.scss'

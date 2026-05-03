@@ -1,0 +1,45 @@
+<div class="dialog-backdrop" (click)="dialogService.close()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    
+    <header class="dialog-header">
+      <h2 [style.color]="'var(--color-black)'">{{ title() }}</h2>
+    </header>
+
+    <form [formGroup]="boardForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label>{{ state().mode === 'add' ? 'Name' : 'Board Name' }}</label>
+        <input 
+          type="text" 
+          formControlName="name" 
+          placeholder="e.g. Web Design"
+          [class.form-error]="isSubmitted && boardForm.get('name')?.invalid">
+      </div>
+
+      <div class="form-group">
+        <label>{{ state().mode === 'add' ? 'Columns' : 'Board Columns' }}</label>
+        <div formArrayName="columns">
+          @for (col of columns.controls; track $index) {
+            <div class="subtask-row">
+              <input 
+                type="text" 
+                [formControlName]="$index"
+                [class.form-error]="isSubmitted && col.invalid">
+              
+              @if (isSubmitted && col.hasError('required')) {
+                <span class="error-msg">Can't be empty</span>
+              }
+
+              <button type="button" class="icon-btn remove-btn" (click)="removeColumn($index)">
+                <img src="/assets/icon-cross.svg" alt="Remove Column">
+              </button>
+            </div>
+          }
+        </div>
+        <button type="button" class="btn-secondary-l" (click)="addColumn()">+ Add New Column</button>
+      </div>
+
+      <button type="submit" class="btn-primary-l submit-btn">{{ btnText() }}</button>
+    </form>
+  </div>
+</div>

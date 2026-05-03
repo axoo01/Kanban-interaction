@@ -8,30 +8,22 @@
     </div>
 
     <div class="nav-links">
-      <p class="nav-label">ALL BOARDS (3)</p>
+      <p class="nav-label">ALL BOARDS ({{ boards().length }})</p>
       
       <ul class="board-list">
+        @for (board of boards(); track board.name) {
+          <li>
+            <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" 
+              routerLinkActive="active-link">
+              <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+              {{ board.name }}
+            </a>
+          </li>
+        }
+
         <li>
-          <a routerLink="/boards/platform-launch" routerLinkActive="active-link">
-            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
-            Platform Launch
-          </a>
-        </li>
-        <li>
-          <a routerLink="/boards/marketing-plan" routerLinkActive="active-link">
-            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
-            Marketing Plan
-          </a>
-        </li>
-        <li>
-          <a routerLink="/boards/roadmap" routerLinkActive="active-link">
-            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
-            Roadmap
-          </a>
-        </li>
-        <li>
-          <button class="btn-create-board">
-            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+          <button class="btn-create-board" (click)="openCreateBoard()">
+            <img src="/assets/icon-board.svg" alt="">
             + Create New Board
           </button>
         </li>
@@ -62,7 +54,7 @@
       <div class="header-left">
         <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo">
         
-        <h1 class="board-title">Platform Launch</h1>
+        <h1 class="board-title">{{ headerTitle() }}</h1>
       </div>
 
       <div class="header-right">
@@ -71,9 +63,18 @@
           <img src="/assets/icon-add-task-mobile.svg" class="mobile-only" alt="">
         </button>
         
-        <button class="options-btn" aria-label="Board options">
-          <img src="/assets/icon-vertical-ellipsis.svg" alt="">
-        </button>
+        <div class="options-container" style="position: relative;">
+          <button class="options-btn" (click)="toggleOptionsMenu()">
+            <img src="/assets/icon-vertical-ellipsis.svg" alt="Options">
+          </button>
+
+          @if (isOptionsMenuOpen()) {
+            <div class="options-dropdown">
+              <button (click)="openEditBoard()">Edit Board</button>
+              <button class="delete-text" (click)="onDeleteBoard()">Delete Board</button>
+            </div>
+          }
+        </div>
       </div>
     </header>
 

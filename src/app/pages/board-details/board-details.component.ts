@@ -1,4 +1,4 @@
-import { Component, input, inject, computed } from '@angular/core';
+import { Component, input, inject, computed, effect } from '@angular/core';
 import { BoardService } from '../../services/board.service';
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
@@ -11,13 +11,19 @@ import { DialogService } from '../../services/dialog.service';
   styleUrl: './board-details.component.scss'
 })
 export class BoardDetailsComponent {
-
   private dialogService = inject(DialogService);
   private boardService = inject(BoardService);
+  
   id = input.required<string>();
   currentBoard = computed(() => this.boardService.getBoardById(this.id()));
 
-  // Helper to determine the dot color class
+  constructor() {
+    // Synchronize the component's route ID with the service state
+    effect(() => {
+      this.boardService.setActiveBoard(this.id());
+    });
+  }
+
   getColumnColorClass(name: string): string {
     const status = name.toLowerCase();
     if (status.includes('todo')) return 'todo';
@@ -27,6 +33,6 @@ export class BoardDetailsComponent {
   }
 
   openEditModal(task: any) {
-    this.dialogService.openEditMode(task);
+    this.dialogService.openTaskModal('edit', task); 
   }
 }

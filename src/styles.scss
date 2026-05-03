@@ -55,11 +55,11 @@ body {
   }
 }
 
-/* Add to src/styles.scss */
+/* 5. COMPONENTS (Primary Button, etc.) */
 
 .btn-primary-l {
   background-color: var(--color-main-purple);
-  color: var(--color-white);
+  color: white;
   border: none;
   padding: 15px 24px;
   border-radius: 24px;

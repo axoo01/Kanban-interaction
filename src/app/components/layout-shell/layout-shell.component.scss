@@ -9,7 +9,6 @@
 
   &.sidebar-hidden {
     grid-template-columns: 0px 1fr;
-
     .sidebar {
       transform: translateX(-100%);
       visibility: hidden; 
@@ -28,6 +27,11 @@
   overflow: hidden; 
   position: relative;
   z-index: 100;
+
+  :host-context(.dark-theme) & {
+    background-color: var(--color-dark-grey);
+    border-right-color: var(--color-lines-dark);
+  }
 
   .logo-container {
     padding: 0 32px;
@@ -57,38 +61,49 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      white-space: nowrap;
-      
-      width: 240px;
+      width: 240px; // Standardized width
       padding: 14px 0 14px 32px;
-      white-space: nowrap;
       border-radius: 0 100px 100px 0; 
-      
       text-decoration: none;
       font-weight: bold;
       font-size: 15px;
       color: var(--color-medium-grey);
-      transition: all 0.4s ease;
       border: none;
       background: transparent;
       cursor: pointer;
-      text-align: left;
+      transition: all 0.3s ease;
 
-      &.active-link {
-        background-color: var(--color-main-purple);
-        color: var(--color-white);
-        img { filter: brightness(0) invert(1); }
+      /* A. LIGHT MODE HOVER (Subtle Grey) */
+      &:hover:not(.active-link) {
+        background-color: var(--color-light-grey);
+        color: var(--color-main-purple);
+        img { filter: none; opacity: 1; }
       }
 
-      &:hover:not(.active-link) {
-        
-        background-color: var(--color-light-grey); 
-        color: var(--color-main-purple);
+      /* Active State (Purple) */
+      &.active-link {
+        background-color: var(--color-main-purple) !important;
+        color: white !important;
+        img { filter: brightness(0) invert(1) !important; opacity: 1; }
+      }
+
+      /* C. DARK MODE OVERRIDES */
+      :host-context(.dark-theme) & {
+        color: white;
+        img { filter: brightness(0) invert(1); opacity: 0.7; }
+
+        /* DARK MODE HOVER (White background + Purple text) */
+        &:hover:not(.active-link) {
+          background-color: white !important;
+          color: var(--color-main-purple) !important;
+          img { filter: none !important; opacity: 1; }
+        }
       }
     }
 
     .btn-create-board {
       color: var(--color-main-purple);
+      :host-context(.dark-theme) & { color: var(--color-main-purple); }
     }
   }
 }
@@ -107,22 +122,43 @@
     align-items: center;
     gap: 24px;
     margin-bottom: 8px;
+
+    :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
   }
 
   .hide-sidebar-btn {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 14px 8px;
-    width: 100%;
+    width: 276px; // Same as sidebar links for alignment
+    margin-left: -24px; // Offset footer padding to align the 'pill' to the edge
+    padding: 14px 32px; 
+    border-radius: 0 100px 100px 0;
     background: transparent;
     border: none;
     color: var(--color-medium-grey);
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.2s;
-    
-    &:hover { color: var(--color-main-purple); }
+    transition: all 0.3s ease;
+
+    /* LIGHT MODE HOVER */
+    &:hover {
+      background-color: var(--color-light-grey);
+      color: var(--color-main-purple);
+      img { filter: none; opacity: 1; }
+    }
+
+    /* DARK MODE OVERRIDES */
+    :host-context(.dark-theme) & {
+      color: white;
+      img { filter: brightness(0) invert(1); opacity: 0.7; }
+
+      &:hover {
+        background-color: white !important;
+        color: var(--color-main-purple) !important;
+        img { filter: none !important; opacity: 1; }
+      }
+    } 
   }
 }
 
@@ -135,6 +171,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 32px;
+
+  :host-context(.dark-theme) & {
+    background-color: var(--color-dark-grey);
+    border-bottom-color: var(--color-lines-dark);
+    .board-title { color: white; }
+  }
 
   .header-left {
     display: flex;
@@ -151,7 +193,24 @@
   }
 }
 
-/* 5. FLOATING SHOW SIDEBAR EYE */
+
+/* 6. CONTENT & WRAPPER */
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  background-color: var(--color-light-grey);
+  overflow: auto;
+  padding: 24px;
+
+  :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
+}
+
+/* 7. FLOATING SHOW SIDEBAR EYE */
 .show-sidebar-floating-btn {
   position: absolute;
   bottom: 32px;
@@ -166,29 +225,49 @@
   justify-content: center;
   align-items: center;
   z-index: 50; 
-  
   &:hover { background-color: var(--color-main-purple-hover); }
 }
 
-/* 6. CONTENT AREA */
-.main-wrapper {
+/* 8. SHARED ELEMENTS (Toggles/Icons) */
+.options-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 5px; 
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  img { height: 20px; width: auto; }
 }
 
-.content-area {
-  flex: 1;
-  background-color: var(--color-light-grey);
-  overflow: auto;
-  padding: 24px;
-}
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  background-color: var(--color-main-purple);
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
 
-/* 7. RESPONSIVE QUERIES */
-@media (max-width: 768px) {
-  .app-container {
-    grid-template-columns: 1fr; 
+  .toggle-circle {
+    width: 14px;
+    height: 14px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  &.active .toggle-circle { transform: translateX(20px); }
+  &:hover { background-color: var(--color-main-purple-hover); }
+}
+
+/* 9. RESPONSIVE QUERIES */
+@media (max-width: 768px) {
+  .app-container { grid-template-columns: 1fr; }
   .sidebar { display: none; }
   .main-header {
     height: 64px;
@@ -200,76 +279,43 @@
   }
 }
 
-.btn-primary-l {
-  background-color: var(--color-main-purple);
-  color: var(--color-white);
-  border: none;
-  padding: 15px 24px;
-  border-radius: 24px;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background-color: var(--color-main-purple-hover);
-  }
-
-  &:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
-  }
+/* THE FLOATING DROPDOWN */
+.options-container {
+  position: relative;
 }
 
-.options-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px 5px; 
+.options-dropdown {
+  position: absolute;
+  top: 70px; // Distance from the top header
+  right: 0;
+  width: 192px;
+  background-color: var(--color-white);
+  box-shadow: 0 10px 20px rgba(54, 78, 126, 0.25);
+  border-radius: 8px;
+  padding: 16px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1000;
 
-  &:hover {
-    opacity: 0.8;
+  :host-context(.dark-theme) & {
+    background-color: var(--color-very-dark-grey);
   }
 
-  img {
-    /* Based on Figma dimensions */
-    height: 20px; 
-    width: auto;
-  }
-}
+  button {
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--color-medium-grey);
+    padding: 0;
 
-.toggle-switch {
-  width: 40px;
-  height: 20px;
-  background-color: var(--color-main-purple);
-  border-radius: 100px;
-  position: relative;
-  cursor: pointer;
-  padding: 0 2px;
-  transition: background-color 0.4s;
-  display: flex;
-  align-items: center;
-  position: relative;
-  transition: background-color 0.3s;
+    &:hover { opacity: 0.7; }
 
-  .toggle-circle {
-    width: 14px;
-    height: 14px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &.active .toggle-circle {
-    transform: translateX(25px); 
-  }
-
-  &:hover {
-    background-color: var(--color-main-purple-hover);
+    &.delete-text {
+      color: var(--color-red);
+    }
   }
 }

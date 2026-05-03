@@ -1,0 +1,122 @@
+/* 1. LAYOUT & BACKDROP */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.dialog-content {
+  background-color: var(--color-white);
+  padding: 32px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 10px 20px rgba(54, 78, 126, 0.25);
+  
+  :host-context(.dark-theme) & {
+    background-color: #2B2C37;
+    h2 { color: white; }
+  }
+}
+
+.dialog-header {
+  margin-bottom: 24px;
+  h2 { font-size: 18px; margin: 0; color: var(--color-black); }
+}
+
+/* 2. FORM ELEMENTS */
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--color-medium-grey);
+    margin-bottom: 8px;
+    :host-context(.dark-theme) & { color: white; }
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    font-size: 13px;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-family: inherit;
+    outline: none;
+
+    &:focus { border-color: var(--color-main-purple); }
+    &.form-error { border-color: var(--color-red) !important; }
+
+    :host-context(.dark-theme) & {
+      background-color: #2B2C37;
+      color: white;
+      border: 1px solid rgba(130, 143, 163, 0.25);
+      &::placeholder { color: rgba(255, 255, 255, 0.25); }
+    }
+  }
+}
+
+/* 3. COLUMN ROWS */
+.subtask-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  position: relative;
+  input { flex: 1; }
+
+  .icon-btn.remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    img { width: 15px; opacity: 0.5; transition: opacity 0.2s; }
+    &:hover img { 
+      opacity: 1; 
+      filter: brightness(0) saturate(100%) invert(43%) sepia(87%) saturate(546%) hue-rotate(314deg) brightness(91%) contrast(100%);
+    }
+  }
+}
+
+.error-msg {
+  color: var(--color-red);
+  font-size: 13px;
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 4. BUTTONS */
+.btn-secondary-l {
+  width: 100%;
+  padding: 12px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: rgba(99, 95, 199, 0.1); 
+  color: var(--color-main-purple);
+  margin-top: 12px;
+  margin-bottom: 24px;
+
+  :host-context(.dark-theme) & {
+    background-color: white !important;
+    color: var(--color-main-purple);
+  }
+}
+
+.submit-btn { width: 100%; }
