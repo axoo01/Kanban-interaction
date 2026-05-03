@@ -19,8 +19,9 @@ export class LayoutShellComponent {
   boardService = inject(BoardService);
   private router = inject(Router);
 
+  // 1. Updated to use the signal property currentBoard()
   headerTitle = computed(() => 
-    this.boardService.getCurrentBoard()?.name || 'Platform Launch'
+    this.boardService.currentBoard()?.name || 'Platform Launch'
   );
 
   boards = this.boardService.boards;
@@ -39,44 +40,43 @@ export class LayoutShellComponent {
     this.themeService.toggleTheme();
   }
 
-
-
-openAddTask() {
-  this.dialogService.openTaskModal('add');
-}
-
-openCreateBoard() {
-  this.dialogService.openBoardModal('add');
-}
-
-openEditBoard() {
-  const currentBoard = this.boardService.getCurrentBoard(); 
-  if (currentBoard) {
-    this.dialogService.openBoardModal('edit', currentBoard);
+  openAddTask() {
+    this.dialogService.openTaskModal('add');
   }
-}
 
-onDeleteBoard() {
-  const currentBoard = this.boardService.getCurrentBoard();
-  if (!currentBoard) return;
+  openCreateBoard() {
+    this.dialogService.openBoardModal('add');
+  }
 
-  this.isOptionsMenuOpen.set(false); // Close the 3-dot menu first
-
-  this.dialogService.openDeleteModal({
-    title: 'Delete this board?',
-    message: `Are you sure you want to delete the '${currentBoard.name}' board? This action will remove all columns and tasks and cannot be reversed.`,
-    onConfirm: () => {
-      this.boardService.deleteBoard(currentBoard.name);
-      
-      // Navigate to first board
-      const remaining = this.boardService.boards();
-      if (remaining.length > 0) {
-        const nextId = remaining[0].name.toLowerCase().replace(/ /g, '-');
-        this.router.navigate(['/boards', nextId]);
-      } else {
-        this.router.navigate(['/']);
-      }
+  openEditBoard() {
+    // 2. Access the signal value using parentheses
+    const currentBoard = this.boardService.currentBoard(); 
+    if (currentBoard) {
+      this.dialogService.openBoardModal('edit', currentBoard);
     }
-  });
-}
+  }
+
+  onDeleteBoard() {
+    // 3. Access the signal value using parentheses
+    const currentBoard = this.boardService.currentBoard();
+    if (!currentBoard) return;
+
+    this.isOptionsMenuOpen.set(false); 
+
+    this.dialogService.openDeleteModal({
+      title: 'Delete this board?',
+      message: `Are you sure you want to delete the '${currentBoard.name}' board? This action will remove all columns and tasks and cannot be reversed.`,
+      onConfirm: () => {
+        this.boardService.deleteBoard(currentBoard.name);
+        
+        const remaining = this.boardService.boards();
+        if (remaining.length > 0) {
+          const nextId = remaining[0].name.toLowerCase().replace(/ /g, '-');
+          this.router.navigate(['/boards', nextId]);
+        } else {
+          this.router.navigate(['/']);
+        }
+      }
+    });
+  }
 }

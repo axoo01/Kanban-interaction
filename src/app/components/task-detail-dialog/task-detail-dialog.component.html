@@ -13,7 +13,7 @@
           <div class="options-dropdown">
             <button (click)="openEditForm()">Edit Task</button>
             <button class="delete-text" (click)="openDeleteTask()">Delete Task</button>
-            </div>
+          </div>
         }
       </div>
     </div>
@@ -21,7 +21,7 @@
     <p class="description">{{ task().description || 'No description provided.' }}</p>
 
     <div class="subtasks-section">
-      <h3 class="section-title">Subtasks ({{ completedCount() }} of {{ task().subtasks.length }})</h3>
+      <h3 class="section-title">Subtasks ({{ completedCount() }} of {{ task().subtasks?.length || 0 }})</h3>
       
       <div class="subtasks-list">
         @for (subtask of task().subtasks; track subtask.title) {
@@ -36,26 +36,24 @@
     </div>
 
     <div class="status-section">
-  <label>Current Status</label>
-  <div class="custom-select" 
-       [class.active]="isStatusDropdownOpen()" 
-       (click)="toggleStatusDropdown()">
-    <div class="select-display">
-      <span>{{ task().status }}</span>
-      <img src="/assets/icon-chevron-down.svg" [class.rotate]="isStatusDropdownOpen()" alt="">
-    </div>
+    <label>Current Status</label>
+    <div class="custom-select" [class.active]="isStatusDropdownOpen()" (click)="toggleStatusDropdown()">
+        <div class="select-display">
+        <span>{{ task().status }}</span>
+        <img src="/assets/icon-chevron-down.svg" [class.rotate]="isStatusDropdownOpen()" alt="">
+        </div>
 
-    @if (isStatusDropdownOpen()) {
-      <div class="select-options">
-        @for (col of columns(); track col.name) {
-          <div class="option" (click)="task().status = col.name">
-            {{ col.name }}
-          </div>
+        @if (isStatusDropdownOpen()) {
+        <div class="select-options">
+            @for (col of columns(); track col.name) {
+            <div class="option" (click)="updateStatus(col.name); $event.stopPropagation()">
+                {{ col.name }}
+            </div>
+            }
+        </div>
         }
-      </div>
-    }
-  </div>
-</div>
+    </div>
+    </div>
 
   </div>
 </div>

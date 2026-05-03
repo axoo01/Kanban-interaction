@@ -50,7 +50,7 @@
     }
   }
 
-  input, textarea, select {
+  input, textarea{
     width: 100%;
     padding: 12px 16px;
     box-sizing: border-box;
@@ -74,6 +74,46 @@
       border: 1px solid rgba(130, 143, 163, 0.25);
       &::placeholder { color: rgba(255, 255, 255, 0.25); }
     }
+  }
+}
+
+select {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(130, 143, 163, 0.25);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  
+  /* THIS REMOVES THE EXTRA BROWSER ICON */
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-main-purple);
+  }
+
+  :host-context(.dark-theme) & {
+    background-color: #2B2C37;
+    color: white;
+  }
+}
+
+.select-wrapper {
+  position: relative;
+  
+  .select-chevron {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; // Allows clicks to go through to the select menu
+    width: 10px;
   }
 }
 

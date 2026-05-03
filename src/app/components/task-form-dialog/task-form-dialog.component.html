@@ -1,5 +1,5 @@
 <div class="dialog-backdrop" (click)="dialogService.close()">
-  <div class="dialog-content" (click)="$event.stopPropagation()" role="dialog" [attr.aria-label]="title()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
     
     <header class="dialog-header">
       <h2>{{ title() }}</h2>
@@ -9,55 +9,45 @@
       
       <div class="form-group">
         <label for="title">Title</label>
-        <input 
-        type="text" 
-        id="title" 
-        formControlName="title" 
-        [class.form-error]="isSubmitted && taskForm.get('title')?.invalid"
-        placeholder="e.g. Take coffee break">
+        <input type="text" id="title" formControlName="title" 
+               [class.form-error]="isSubmitted && taskForm.get('title')?.invalid"
+               placeholder="e.g. Take coffee break">
       </div>
 
       <div class="form-group">
         <label for="description">Description</label>
         <textarea id="description" formControlName="description" rows="5" 
-                  placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."></textarea>
+                  placeholder="e.g. It's always good to take a break."></textarea>
       </div>
 
       <div class="form-group subtasks-group" formArrayName="subtasks">
         <label>Subtasks</label>
-        
         @for (subtask of subtasksFormArray.controls; track $index) {
             <div [formGroupName]="$index" class="subtask-row">
-                <input 
-                type="text" 
-                formControlName="name" 
-                [class.form-error]="isSubmitted && subtask.get('name')?.invalid"
-                placeholder="e.g. Make coffee">
-                
-                @if (isSubmitted && subtask.get('name')?.hasError('required')) {
-                <span class="error-msg">Can't be empty</span>
-                }
-                
+                <input type="text" formControlName="name" 
+                       [class.form-error]="isSubmitted && subtask.get('name')?.invalid"
+                       placeholder="e.g. Make coffee">
                 <button type="button" class="icon-btn remove-btn" (click)="removeSubtask($index)">
-                    <img src="/assets/icon-cross.svg" alt="Remove subtask">
+                    <img src="/assets/icon-cross.svg" alt="Remove">
                 </button>
             </div>
         }
-
         <button type="button" class="btn-secondary-l" (click)="addSubtask()">+ Add New Subtask</button>
       </div>
 
       <div class="form-group">
         <label for="status">Status</label>
-        <select id="status" formControlName="status">
-          @for (option of statusOptions; track option) {
-            <option [value]="option">{{ option }}</option>
-          }
-        </select>
+        <div class="select-wrapper">
+          <select id="status" formControlName="status">
+            @for (option of statusOptions(); track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+          <img src="/assets/icon-chevron-down.svg" class="select-chevron" alt="">
+        </div>
       </div>
 
       <button type="submit" class="btn-primary-l submit-btn">{{ submitBtnText() }}</button>
     </form>
-
   </div>
 </div>

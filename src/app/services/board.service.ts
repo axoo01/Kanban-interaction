@@ -6,61 +6,65 @@ export class BoardService {
   private boardsSignal = signal(data.boards);
   boards = this.boardsSignal.asReadonly();
 
-  // Track the ID of the board currently being viewed
+  // 1. TRACK ACTIVE BOARD
   activeBoardId = signal<string>('');
+
+  // 2. THE REACTIVE SOURCE (Important for your dropdowns!)
+  currentBoard = computed(() => {
+    const id = this.activeBoardId();
+    return this.boardsSignal().find(
+      b => b.name.toLowerCase().replace(/ /g, '-') === id
+    );
+  });
 
   setActiveBoard(id: string) {
     this.activeBoardId.set(id);
-  }
-
-  getCurrentBoard() {
-    const id = this.activeBoardId();
-    return this.getBoardById(id);
   }
 
   getBoardById(id: string) {
     return this.boards().find(b => b.name.toLowerCase().replace(/ /g, '-') === id);
   }
 
+  // --- RESTORED TASK ACTIONS ---
+
   addTask(boardId: string, task: any) {
-    this.boardsSignal.update(boards => {
-      return boards.map(board => {
-        if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
-          const column = board.columns.find(col => col.name === task.status);
-          if (column) {
-            column.tasks.push({
-              title: task.title,
-              description: task.description,
-              status: task.status,
-              subtasks: task.subtasks.map((s: any) => ({ title: s.name, isCompleted: false }))
-            });
-          }
+    this.boardsSignal.update(boards => boards.map(board => {
+      if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
+        const column = board.columns.find(col => col.name === task.status);
+        if (column) {
+          column.tasks.push({
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            subtasks: task.subtasks.map((s: any) => ({ 
+              title: s.name || s, 
+              isCompleted: false 
+            }))
+          });
         }
-        return board;
-      });
-    });
+      }
+      return board;
+    }));
   }
 
   updateTask(boardId: string, oldTaskTitle: string, updatedTask: any) {
-    this.boardsSignal.update(boards => {
-      return boards.map(board => {
-        if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
-          board.columns.forEach(col => {
-            const taskIndex = col.tasks.findIndex(t => t.title === oldTaskTitle);
-            if (taskIndex !== -1) {
-              if (col.name !== updatedTask.status) {
-                col.tasks.splice(taskIndex, 1);
-                const newCol = board.columns.find(c => c.name === updatedTask.status);
-                newCol?.tasks.push(this.formatTask(updatedTask));
-              } else {
-                col.tasks[taskIndex] = this.formatTask(updatedTask);
-              }
+    this.boardsSignal.update(boards => boards.map(board => {
+      if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
+        board.columns.forEach(col => {
+          const taskIndex = col.tasks.findIndex(t => t.title === oldTaskTitle);
+          if (taskIndex !== -1) {
+            if (col.name !== updatedTask.status) {
+              col.tasks.splice(taskIndex, 1);
+              const newCol = board.columns.find(c => c.name === updatedTask.status);
+              newCol?.tasks.push(this.formatTask(updatedTask));
+            } else {
+              col.tasks[taskIndex] = this.formatTask(updatedTask);
             }
-          });
-        }
-        return board;
-      });
-    });
+          }
+        });
+      }
+      return board;
+    }));
   }
 
   private formatTask(formValue: any) {
@@ -68,24 +72,24 @@ export class BoardService {
       title: formValue.title,
       description: formValue.description,
       status: formValue.status,
-      subtasks: formValue.subtasks.map((s: any) => ({ title: s.name, isCompleted: false }))
+      subtasks: formValue.subtasks.map((s: any) => ({ 
+        title: s.name || s.title || s, 
+        isCompleted: s.isCompleted || false 
+      }))
     };
   }
 
+  // --- RESTORED BOARD ACTIONS ---
+
   addBoard(boardData: any) {
-  this.boardsSignal.update(boards => {
-    const newBoard = {
-      name: boardData.name,
-      columns: boardData.columns.map((colName: string) => ({
-        name: colName,
-        tasks: []
-      }))
-    };
-    const updatedBoards = [...boards, newBoard];
-    console.log('BOARD SERVICE: New Board Added. Total boards:', updatedBoards.length);
-    return updatedBoards;
-  });
-}
+    this.boardsSignal.update(boards => [
+      ...boards, 
+      {
+        name: boardData.name,
+        columns: boardData.columns.map((colName: string) => ({ name: colName, tasks: [] }))
+      }
+    ]);
+  }
 
   updateBoard(oldName: string, updatedBoard: any) {
     this.boardsSignal.update(boards => boards.map(board => {
@@ -93,41 +97,38 @@ export class BoardService {
         return {
           ...board,
           name: updatedBoard.name,
-          // Map new column names while preserving existing tasks if the index matches
           columns: updatedBoard.columns.map((colName: string, index: number) => {
             const existingCol = board.columns[index];
-            return {
-              name: colName,
-              tasks: existingCol ? existingCol.tasks : [] 
-            };
+            return { name: colName, tasks: existingCol ? existingCol.tasks : [] };
           })
         };
       }
       return board;
     }));
   }
+
   deleteBoard(boardName: string) {
-    this.boardsSignal.update(boards => 
-      boards.filter(b => b.name !== boardName)
-    );
+    this.boardsSignal.update(boards => boards.filter(b => b.name !== boardName));
   }
 
   deleteTask(taskTitle: string, columnStatus: string) {
-  this.boardsSignal.update(boards => boards.map(board => {
-    // Only update the columns for the board currently being viewed
-    return {
+    this.boardsSignal.update(boards => boards.map(board => ({
+      ...board,
+      columns: board.columns.map(col => col.name === columnStatus 
+        ? { ...col, tasks: col.tasks.filter(t => t.title !== taskTitle) } 
+        : col
+      )
+    })));
+  }
+
+  moveTask(task: any, oldStatus: string, newStatus: string) {
+    this.boardsSignal.update(boards => boards.map(board => ({
       ...board,
       columns: board.columns.map(col => {
-        if (col.name === columnStatus) {
-          // Filter out the task by title
-          return {
-            ...col,
-            tasks: col.tasks.filter(t => t.title !== taskTitle)
-          };
-        }
+        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter(t => t.title !== task.title) };
+        if (col.name === newStatus) return { ...col, tasks: [...col.tasks, { ...task, status: newStatus }] };
         return col;
       })
-    };
-  }));
-}
+    })));
+  }
 }

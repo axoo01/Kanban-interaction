@@ -43,4 +43,11 @@ export class BoardDetailsComponent {
   openEditModal(task: any) {
     this.dialogService.openTaskModal('edit', task); 
   }
+
+  onAddNewColumn() {
+  const board = this.currentBoard();
+  if (board) {
+    this.dialogService.openBoardModal('edit', board);
+  }
+}
 }

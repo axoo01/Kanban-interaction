@@ -14,25 +14,24 @@ import { Router } from '@angular/router';
 })
 export class TaskFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
-  dialogService = inject(DialogService);
   private boardService = inject(BoardService);
-  isSubmitted = false;
   private router = inject(Router);
-  
+  public dialogService = inject(DialogService);
 
   taskForm!: FormGroup;
+  isSubmitted = false;
   dialogState = this.dialogService.state;
 
-  // Derive title and button text based on mode
+  // DYNAMIC STATUS OPTIONS: Now it watches the BoardService for new columns!
+  statusOptions = computed(() => 
+    this.boardService.currentBoard()?.columns.map(col => col.name) || []
+  );
+
   title = computed(() => this.dialogState().mode === 'add' ? 'Add New Task' : 'Edit Task');
   submitBtnText = computed(() => this.dialogState().mode === 'add' ? 'Create Task' : 'Save Changes');
 
-  // Need status options for the dropdown (from Board details component plan)
-  statusOptions = ['Todo', 'Doing', 'Done']; // Should match columns in data.json
-
   ngOnInit() {
     this.initForm();
-    // If edit mode, patch values
     if (this.dialogState().mode === 'edit' && this.dialogState().data) {
       this.patchEditData(this.dialogState().data);
     }
@@ -42,11 +41,11 @@ export class TaskFormDialogComponent implements OnInit {
     this.taskForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
-      // Dynamic array for subtasks
       subtasks: this.fb.array([
-        this.createSubtaskFormGroup() // Start with one empty input
+        this.createSubtaskFormGroup() 
       ]),
-      status: [this.statusOptions[0]] // Default to first status
+      // Default to the first available column in the board
+      status: [this.statusOptions()[0] || ''] 
     });
   }
 
@@ -56,30 +55,25 @@ export class TaskFormDialogComponent implements OnInit {
     });
   }
 
-  // Getter for easy template access
   get subtasksFormArray() {
     return this.taskForm.get('subtasks') as FormArray;
   }
 
   addSubtask() {
-    this.isSubmitted = false; // Reset flag so new subtask isn't immediately red
+    this.isSubmitted = false;
     this.subtasksFormArray.push(this.createSubtaskFormGroup());
   }
 
   removeSubtask(index: number) {
-    this.isSubmitted = false; // Reset flag
     this.subtasksFormArray.removeAt(index);
-    
   }
 
   patchEditData(data: any) {
-    // 1. Clear existing dynamic items
     this.subtasksFormArray.clear();
-    // 2. Add existing subtasks
     data.subtasks.forEach((st: any) => {
       this.subtasksFormArray.push(this.createSubtaskFormGroup(st.title));
     });
-    // 3. Patch other values
+
     this.taskForm.patchValue({
       title: data.title,
       description: data.description,
@@ -87,22 +81,18 @@ export class TaskFormDialogComponent implements OnInit {
     });
   }
 
-    onSubmit() {
+  onSubmit() {
     this.isSubmitted = true;
-
     if (this.taskForm.valid) {
-      const urlSegments = this.router.url.split('/');
-      const boardId = urlSegments[urlSegments.length - 1];
+      const boardId = this.boardService.activeBoardId();
       const mode = this.dialogState().mode;
 
       if (mode === 'add') {
         this.boardService.addTask(boardId, this.taskForm.value);
       } else {
-        // Use the original title from the data to find the task in the service
         const originalTitle = this.dialogState().data.title;
         this.boardService.updateTask(boardId, originalTitle, this.taskForm.value);
       }
-
       this.dialogService.close();
     }
   }
