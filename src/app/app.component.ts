@@ -5,6 +5,7 @@ import { TaskFormDialogComponent } from './components/task-form-dialog/task-form
 import { BoardFormDialogComponent } from './components/board-form-dialog/board-form-dialog.component'; // 1. IMPORT THIS
 import { DialogService } from './services/dialog.service';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { TaskDetailDialogComponent } from './components/task-detail-dialog/task-detail-dialog.component';
 
 @Component({
   standalone: true,
@@ -14,16 +15,19 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     RouterOutlet, 
     TaskFormDialogComponent, 
     BoardFormDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TaskDetailDialogComponent
   ], 
   template: `
     <router-outlet />
 
     @if (dialogService.state().isOpen) {
-      @switch (dialogService.state().type) {
-        @case ('task') { <app-task-form-dialog /> }
-        @case ('board') { <app-board-form-dialog /> }
-        @case ('delete') { <app-confirm-dialog /> }
+      @if (dialogService.state().isOpen) {
+        @switch (dialogService.state().type) {
+          @case ('task') { <app-task-form-dialog /> }
+          @case ('board') { <app-board-form-dialog /> }
+          @case ('delete') { <app-confirm-dialog /> }
+          @case ('view') { <app-task-detail-dialog /> } }
       }
     }
   `,

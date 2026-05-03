@@ -24,6 +24,7 @@ export class BoardDetailsComponent {
     });
   }
 
+  // Helper for the column header dot colors
   getColumnColorClass(name: string): string {
     const status = name.toLowerCase();
     if (status.includes('todo')) return 'todo';
@@ -31,7 +32,14 @@ export class BoardDetailsComponent {
     if (status.includes('done')) return 'done';
     return 'custom';
   }
-
+  openTaskDetail(task: any) {
+    console.log('CLICK DETECTED: Opening task...', task.title);
+    this.dialogService.openViewTaskModal(task);
+  }
+  getCompletedSubtasks(task: any): number {
+    if (!task.subtasks) return 0;
+    return task.subtasks.filter((s: any) => s.isCompleted).length;
+  }
   openEditModal(task: any) {
     this.dialogService.openTaskModal('edit', task); 
   }

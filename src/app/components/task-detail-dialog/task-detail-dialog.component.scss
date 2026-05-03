@@ -1,0 +1,169 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.dialog-content {
+  background-color: var(--color-white);
+  padding: 32px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+
+  :host-context(.dark-theme) & { background-color: #2B2C37; }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  h2 { font-size: 18px; line-height: 23px; color: var(--color-black); }
+  :host-context(.dark-theme) & h2 { color: white; }
+}
+
+/* IDENTICAL DROPDOWN STYLING */
+.options-container {
+  position: relative;
+  .options-btn {
+    background: none; border: none; cursor: pointer; padding: 8px;
+    &:hover { opacity: 0.7; }
+  }
+}
+
+.options-dropdown {
+  position: absolute;
+  top: 40px;
+  right: -60px;
+  width: 192px;
+  background-color: var(--color-white);
+  box-shadow: 0 10px 20px rgba(54, 78, 126, 0.25);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+
+  :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
+
+  button {
+    background: none; border: none; text-align: left; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--color-medium-grey);
+    &:hover { opacity: 0.7; }
+    &.delete-text { color: var(--color-red); }
+  }
+}
+
+.description {
+  font-size: 13px; line-height: 23px; color: var(--color-medium-grey); margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 12px; font-weight: bold; color: var(--color-medium-grey); margin-bottom: 16px;
+  :host-context(.dark-theme) & { color: white; }
+}
+
+/* NO LINE-THROUGH STYLING */
+.subtask-item {
+  background-color: var(--color-light-grey);
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover { background-color: rgba(99, 95, 199, 0.25); }
+
+  .checkbox {
+    width: 16px; height: 16px; border: 1px solid rgba(130, 143, 163, 0.25); border-radius: 2px; background: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  span { font-size: 12px; font-weight: bold; color: var(--color-black); }
+
+  &.completed {
+    .checkbox { background-color: var(--color-main-purple); border-color: var(--color-main-purple); }
+    span { opacity: 0.5; } /* Greyed out but NO line-through */
+  }
+
+  :host-context(.dark-theme) & {
+    background-color: var(--color-very-dark-grey);
+    span { color: white; }
+  }
+}
+
+.status-section {
+  margin-top: 24px;
+  label { 
+    font-size: 12px; font-weight: bold; color: var(--color-medium-grey); 
+    display: block; margin-bottom: 8px; 
+    :host-context(.dark-theme) & { color: white; } 
+  }
+}
+
+.custom-select {
+  position: relative;
+  cursor: pointer;
+
+  .select-display {
+    padding: 12px 20px; // Same as subtasks
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--color-black);
+    transition: border-color 0.2s;
+
+    img { 
+      width: 10px; 
+      transition: transform 0.2s;
+      &.rotate { transform: rotate(180deg); }
+    }
+
+    :host-context(.dark-theme) & {
+      color: white;
+      background-color: transparent;
+    }
+  }
+
+  /* PURPLE FOCUS ON CLICK */
+  &.active .select-display, 
+  &:hover .select-display {
+    border-color: var(--color-main-purple);
+  }
+
+  .select-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    box-shadow: 0 10px 20px rgba(54, 78, 126, 0.25);
+    border-radius: 8px;
+    padding: 16px;
+    z-index: 10;
+
+    :host-context(.dark-theme) & {
+      background-color: var(--color-very-dark-grey);
+    }
+
+    .option {
+      padding: 4px 0;
+      font-size: 13px;
+      color: var(--color-medium-grey);
+      &:hover { color: var(--color-main-purple); }
+    }
+  }
+}

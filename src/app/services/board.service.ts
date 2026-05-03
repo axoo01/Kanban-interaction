@@ -111,4 +111,23 @@ export class BoardService {
       boards.filter(b => b.name !== boardName)
     );
   }
+
+  deleteTask(taskTitle: string, columnStatus: string) {
+  this.boardsSignal.update(boards => boards.map(board => {
+    // Only update the columns for the board currently being viewed
+    return {
+      ...board,
+      columns: board.columns.map(col => {
+        if (col.name === columnStatus) {
+          // Filter out the task by title
+          return {
+            ...col,
+            tasks: col.tasks.filter(t => t.title !== taskTitle)
+          };
+        }
+        return col;
+      })
+    };
+  }));
+}
 }

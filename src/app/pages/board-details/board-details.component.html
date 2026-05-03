@@ -16,9 +16,9 @@
 
           <div class="task-list">
             @for (task of column.tasks; track task.title) {
-              <div class="task-card" (click)="openEditModal(task)">
+              <div class="task-card" (click)="openTaskDetail(task)">
                 <h3>{{ task.title }}</h3>
-                <p>{{ task.subtasks.length }} subtasks</p>
+                <p>{{ getCompletedSubtasks(task) }} of {{ task.subtasks.length }} subtasks</p>
               </div>
             }
           </div>
