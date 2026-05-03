@@ -1,0 +1,11 @@
+<div class="dialog-backdrop" (click)="dialogService.close()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <h2 class="title">{{ state().data.title }}</h2>
+    <p class="message">{{ state().data.message }}</p>
+
+    <div class="button-group">
+      <button class="btn-delete" (click)="onConfirm()">Delete</button>
+      <button class="btn-cancel" (click)="dialogService.close()">Cancel</button>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout-shell',
@@ -16,6 +17,7 @@ export class LayoutShellComponent {
   isDarkMode = this.themeService.darkMode;
   private dialogService = inject(DialogService);
   boardService = inject(BoardService);
+  private router = inject(Router);
 
   headerTitle = computed(() => 
     this.boardService.getCurrentBoard()?.name || 'Platform Launch'
@@ -37,28 +39,44 @@ export class LayoutShellComponent {
     this.themeService.toggleTheme();
   }
 
-  // src/app/components/layout-shell/layout-shell.component.ts
+
 
 openAddTask() {
-  console.log('DEBUG: Add Task Clicked'); // <--- LOG 1
   this.dialogService.openTaskModal('add');
 }
 
 openCreateBoard() {
-  console.log('DEBUG: Create Board Clicked'); // <--- LOG 2
   this.dialogService.openBoardModal('add');
 }
 
 openEditBoard() {
-  console.log('DEBUG: 3-Dots/Edit Board Clicked'); // <--- LOG 3
   const currentBoard = this.boardService.getCurrentBoard(); 
-  console.log('DEBUG: Current Board Data:', currentBoard); // <--- LOG 4
   if (currentBoard) {
     this.dialogService.openBoardModal('edit', currentBoard);
   }
 }
 
 onDeleteBoard() {
-    console.log('Delete Board clicked - logic coming soon!');
-  }
+  const currentBoard = this.boardService.getCurrentBoard();
+  if (!currentBoard) return;
+
+  this.isOptionsMenuOpen.set(false); // Close the 3-dot menu first
+
+  this.dialogService.openDeleteModal({
+    title: 'Delete this board?',
+    message: `Are you sure you want to delete the '${currentBoard.name}' board? This action will remove all columns and tasks and cannot be reversed.`,
+    onConfirm: () => {
+      this.boardService.deleteBoard(currentBoard.name);
+      
+      // Navigate to first board
+      const remaining = this.boardService.boards();
+      if (remaining.length > 0) {
+        const nextId = remaining[0].name.toLowerCase().replace(/ /g, '-');
+        this.router.navigate(['/boards', nextId]);
+      } else {
+        this.router.navigate(['/']);
+      }
+    }
+  });
+}
 }

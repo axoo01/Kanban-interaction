@@ -1,0 +1,67 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.dialog-content {
+  background-color: var(--color-white);
+  padding: 32px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+
+  :host-context(.dark-theme) & {
+    background-color: #2B2C37;
+  }
+}
+
+.title {
+  color: var(--color-red);
+  font-size: 18px;
+  margin: 0 0 24px 0;
+}
+
+.message {
+  color: var(--color-medium-grey);
+  font-size: 13px;
+  line-height: 23px;
+  margin-bottom: 24px;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+
+  button {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  .btn-delete {
+    background-color: var(--color-red);
+    color: white;
+  }
+
+  .btn-cancel {
+    background-color: rgba(99, 95, 199, 0.1);
+    color: var(--color-main-purple);
+
+    :host-context(.dark-theme) & {
+      background-color: white;
+    }
+  }
+}

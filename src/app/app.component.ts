@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { TaskFormDialogComponent } from './components/task-form-dialog/task-form-dialog.component';
 import { BoardFormDialogComponent } from './components/board-form-dialog/board-form-dialog.component'; // 1. IMPORT THIS
 import { DialogService } from './services/dialog.service';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   standalone: true,
@@ -12,16 +13,17 @@ import { DialogService } from './services/dialog.service';
     CommonModule, 
     RouterOutlet, 
     TaskFormDialogComponent, 
-    BoardFormDialogComponent // 2. ADD TO IMPORTS
+    BoardFormDialogComponent,
+    ConfirmDialogComponent
   ], 
   template: `
     <router-outlet />
 
     @if (dialogService.state().isOpen) {
-      @if (dialogService.state().type === 'task') {
-        <app-task-form-dialog />
-      } @else {
-        <app-board-form-dialog />
+      @switch (dialogService.state().type) {
+        @case ('task') { <app-task-form-dialog /> }
+        @case ('board') { <app-board-form-dialog /> }
+        @case ('delete') { <app-confirm-dialog /> }
       }
     }
   `,

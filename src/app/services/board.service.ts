@@ -93,16 +93,22 @@ export class BoardService {
         return {
           ...board,
           name: updatedBoard.name,
+          // Map new column names while preserving existing tasks if the index matches
           columns: updatedBoard.columns.map((colName: string, index: number) => {
             const existingCol = board.columns[index];
             return {
               name: colName,
-              tasks: existingCol ? existingCol.tasks : []
+              tasks: existingCol ? existingCol.tasks : [] 
             };
           })
         };
       }
       return board;
     }));
+  }
+  deleteBoard(boardName: string) {
+    this.boardsSignal.update(boards => 
+      boards.filter(b => b.name !== boardName)
+    );
   }
 }
