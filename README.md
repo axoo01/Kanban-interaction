@@ -3,7 +3,7 @@
 A modern Kanban task management application built with **Angular 19+** and **SCSS**. This application enables users to manage complex projects through multiple boards, categorized task columns, and a responsive interface designed for professional productivity. featuring a robust routing architecture and reactive state management.
 
 ## Live Demo
-**[Click here to view the live site](https://kanban-task-mgt.netlify.app/boards/roadmap)**
+**[Click here to view the live site](https://kanban-task-interaction.netlify.app/boards)**
 
 
 
