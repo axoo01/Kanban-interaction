@@ -9,7 +9,7 @@
   z-index: 1000;
   padding: 20px;
 
-  /* MOBILE: Ensure backdrop has enough padding so the modal feels like a popup */
+  /* MOBILE: pop up*/
   @media (max-width: 768px) {
     padding: 16px;
   }
@@ -23,7 +23,7 @@
   max-width: 480px;
 
   /* RESPONSIVE HEIGHT LOGIC */
-  max-height: 90vh; // Desktop default
+  max-height: 90vh; 
   overflow-y: auto;
   transition: all 0.3s ease;
 
@@ -37,8 +37,8 @@
   }
 
   @media (max-width: 768px) {
-    padding: 24px; // Reduced padding for small screens
-    max-height: 90vh; // Shorter height so it doesn't feel fullscreen
+    padding: 24px; 
+    max-height: 90vh;
     border-radius: 6px;
   }
 
@@ -67,7 +67,7 @@
   position: relative;
 
   @media (max-width: 768px) {
-    margin-bottom: 20px; // Tighter spacing for mobile
+    margin-bottom: 20px; 
   }
 
   label {
