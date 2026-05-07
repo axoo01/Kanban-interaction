@@ -9,22 +9,23 @@
 
   &.sidebar-hidden {
     grid-template-columns: 0px 1fr;
+
     .sidebar {
       transform: translateX(-100%);
-      visibility: hidden; 
+      visibility: hidden;
     }
   }
 }
 
-/* 2. SIDEBAR STYLING */
+/* 2. SIDEBAR STYLING (Desktop) */
 .sidebar {
   background-color: var(--color-white);
   border-right: 1px solid var(--color-lines-light);
   display: flex;
   flex-direction: column;
-  padding: 32px 0; 
+  padding: 32px 0;
   transition: transform 0.3s ease, visibility 0.3s;
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
   z-index: 100;
 
@@ -57,13 +58,14 @@
       display: flex;
     }
 
-    li a, .btn-create-board {
+    li a,
+    .btn-create-board {
       display: flex;
       align-items: center;
       gap: 16px;
-      width: 240px; // Standardized width
+      width: 240px;
       padding: 14px 0 14px 32px;
-      border-radius: 0 100px 100px 0; 
+      border-radius: 0 100px 100px 0;
       text-decoration: none;
       font-weight: bold;
       font-size: 15px;
@@ -73,42 +75,43 @@
       cursor: pointer;
       transition: all 0.3s ease;
 
-      /* A. LIGHT MODE HOVER (Subtle Grey) */
       &:hover:not(.active-link) {
         background-color: var(--color-light-grey);
         color: var(--color-main-purple);
-        img { filter: none; opacity: 1; }
       }
 
-      /* Active State (Purple) */
       &.active-link {
         background-color: var(--color-main-purple) !important;
         color: white !important;
-        img { filter: brightness(0) invert(1) !important; opacity: 1; }
+
+        img {
+          filter: brightness(0) invert(1) !important;
+          opacity: 1;
+        }
       }
 
-      /* C. DARK MODE OVERRIDES */
       :host-context(.dark-theme) & {
         color: white;
-        img { filter: brightness(0) invert(1); opacity: 0.7; }
 
-        /* DARK MODE HOVER (White background + Purple text) */
+        img {
+          filter: brightness(0) invert(1);
+          opacity: 0.7;
+        }
+
         &:hover:not(.active-link) {
           background-color: white !important;
           color: var(--color-main-purple) !important;
-          img { filter: none !important; opacity: 1; }
         }
       }
     }
 
     .btn-create-board {
       color: var(--color-main-purple);
-      :host-context(.dark-theme) & { color: var(--color-main-purple); }
     }
   }
 }
 
-/* 3. SIDEBAR FOOTER (Theme & Hide) */
+/* 3. SIDEBAR FOOTER */
 .sidebar-footer {
   margin-top: auto;
   padding: 0 24px;
@@ -123,78 +126,94 @@
     gap: 24px;
     margin-bottom: 8px;
 
-    :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
+    :host-context(.dark-theme) & {
+      background-color: var(--color-very-dark-grey);
+    }
   }
 
   .hide-sidebar-btn {
     display: flex;
     align-items: center;
     gap: 15px;
-    width: 276px; // Same as sidebar links for alignment
-    margin-left: -24px; // Offset footer padding to align the 'pill' to the edge
-    padding: 14px 32px; 
+    width: 276px;
+    margin-left: -24px;
+    padding: 14px 32px;
     border-radius: 0 100px 100px 0;
     background: transparent;
     border: none;
     color: var(--color-medium-grey);
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
 
-    /* LIGHT MODE HOVER */
     &:hover {
       background-color: var(--color-light-grey);
       color: var(--color-main-purple);
-      img { filter: none; opacity: 1; }
     }
 
-    /* DARK MODE OVERRIDES */
     :host-context(.dark-theme) & {
       color: white;
-      img { filter: brightness(0) invert(1); opacity: 0.7; }
 
       &:hover {
         background-color: white !important;
         color: var(--color-main-purple) !important;
-        img { filter: none !important; opacity: 1; }
       }
-    } 
+    }
   }
 }
 
-/* 4. MAIN HEADER STYLING */
+/* 4. MAIN HEADER STYLING (Refined for Centering) */
 .main-header {
   height: 96px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-lines-light);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; // This handles vertical centering
   padding: 0 32px;
 
   :host-context(.dark-theme) & {
     background-color: var(--color-dark-grey);
     border-bottom-color: var(--color-lines-dark);
-    .board-title { color: white; }
   }
 
   .header-left {
     display: flex;
     align-items: center;
     gap: 16px;
-    .mobile-logo { display: none; }
-    .board-title { font-size: 24px; margin: 0; font-weight: bold; }
+    height: 100%; // Ensures flex-centering works correctly
+
+    .board-title {
+      font-size: 24px;
+      margin: 0;
+      font-weight: bold;
+      color: var(--color-black);
+
+      :host-context(.dark-theme) & {
+        color: white;
+      }
+    }
+
+    .chevron-mobile {
+      width: 10px;
+      height: 7px;
+      margin-left: 8px;
+      transition: transform 0.3s ease;
+
+      &.rotate {
+        transform: rotate(180deg);
+      }
+    }
   }
 
   .header-right {
     display: flex;
     align-items: center;
     gap: 24px;
+    height: 100%;
   }
 }
 
-
-/* 6. CONTENT & WRAPPER */
+/* 5. CONTENT & WRAPPER */
 .main-wrapper {
   display: flex;
   flex-direction: column;
@@ -207,10 +226,12 @@
   overflow: auto;
   padding: 24px;
 
-  :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
+  :host-context(.dark-theme) & {
+    background-color: var(--color-very-dark-grey);
+  }
 }
 
-/* 7. FLOATING SHOW SIDEBAR EYE */
+/* 6. FLOATING SHOW SIDEBAR EYE */
 .show-sidebar-floating-btn {
   position: absolute;
   bottom: 32px;
@@ -224,20 +245,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 50; 
-  &:hover { background-color: var(--color-main-purple-hover); }
+  z-index: 50;
 }
 
-/* 8. SHARED ELEMENTS (Toggles/Icons) */
+/* 7. SHARED ELEMENTS (Toggles/Icons) */
 .options-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 8px 5px; 
+  padding: 8px 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  img { height: 20px; width: auto; }
 }
 
 .toggle-switch {
@@ -249,7 +268,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: background-color 0.3s;
 
   .toggle-circle {
     width: 14px;
@@ -258,35 +276,18 @@
     border-radius: 50%;
     position: absolute;
     left: 3px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s;
   }
 
-  &.active .toggle-circle { transform: translateX(20px); }
-  &:hover { background-color: var(--color-main-purple-hover); }
-}
-
-/* 9. RESPONSIVE QUERIES */
-@media (max-width: 768px) {
-  .app-container { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .main-header {
-    height: 64px;
-    padding: 0 16px;
-    .header-left {
-      .mobile-logo { display: block; }
-      .board-title { font-size: 18px; }
-    }
+  &.active .toggle-circle {
+    transform: translateX(20px);
   }
 }
 
-/* THE FLOATING DROPDOWN */
-.options-container {
-  position: relative;
-}
-
+/* 8. OPTIONS DROPDOWN */
 .options-dropdown {
   position: absolute;
-  top: 70px; // Distance from the top header
+  top: 70px;
   right: 0;
   width: 192px;
   background-color: var(--color-white);
@@ -310,12 +311,152 @@
     font-weight: 500;
     cursor: pointer;
     color: var(--color-medium-grey);
-    padding: 0;
-
-    &:hover { opacity: 0.7; }
 
     &.delete-text {
       color: var(--color-red);
+    }
+  }
+}
+
+/* 9. THE MOBILE SIDEBAR DROPDOWN (Figma Styled) */ 
+
+.mobile-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-sidebar-content {
+  margin-top: 80px;
+  width: 264px;
+  height: fit-content;
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: 16px 0;
+  box-shadow: 0 10px 20px rgba(54, 78, 126, 0.25);
+
+  :host-context(.dark-theme) & {
+    background-color: var(--color-dark-grey);
+  }
+
+  .nav-label {
+    padding: 0 24px;
+    margin-bottom: 20px;
+    color: var(--color-medium-grey);
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    font-weight: bold;
+  }
+
+  /* REUSING PILL STYLES FOR MOBILE */
+  .board-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 4px;
+      display: flex;
+    }
+
+    li a,
+    .btn-create-board {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 240px;
+      padding: 14px 0 14px 24px;
+      border-radius: 0 100px 100px 0;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+      color: var(--color-medium-grey);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.active-link {
+        background-color: var(--color-main-purple) !important;
+        color: white !important;
+
+        img {
+          filter: brightness(0) invert(1) !important;
+          opacity: 1;
+        }
+      }
+
+      &:hover:not(.active-link) {
+        background-color: var(--color-light-grey);
+        color: var(--color-main-purple);
+      }
+    }
+
+    .btn-create-board {
+      color: var(--color-main-purple);
+    }
+  }
+
+  .theme-toggle-mobile {
+    background-color: var(--color-light-grey);
+    margin: 16px 16px 0;
+    height: 48px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+
+    :host-context(.dark-theme) & {
+      background-color: var(--color-very-dark-grey);
+    }
+  }
+}
+
+/* 10. CLEANED RESPONSIVE HELPERS */
+.desktop-only {
+  display: flex;
+  align-items: center;
+}
+
+// Flex ensures vertical centering
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .app-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sidebar {
+    display: none !important;
+  }
+
+  .main-header {
+    height: 64px;
+    padding: 0 16px;
+
+    .header-left .board-title {
+      font-size: 18px;
+    }
+
+    // Adjust button padding for mobile icon
+    .btn-primary-l {
+      padding: 10px 18px;
+      border-radius: 24px;
     }
   }
 }

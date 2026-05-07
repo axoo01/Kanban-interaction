@@ -80,3 +80,48 @@ body {
     cursor: not-allowed;
   }
 }
+
+/* GLOBAL MODAL RESPONSIVENESS */
+.dialog-backdrop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px; // Ensures the modal never touches the screen edges
+}
+
+.dialog-content {
+  width: 100%;
+  max-width: 480px; // Standard Figma desktop width
+  max-height: 90vh; // Capped at 90% of the screen height
+  overflow-y: auto; // Enables scrolling within the modal
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: 32px;
+  position: relative;
+
+  /* Scrollbar Styling for a cleaner look */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-main-purple);
+    border-radius: 10px;
+  }
+
+  :host-context(.dark-theme) & {
+    background-color: var(--color-dark-grey);
+  }
+
+  /* MOBILE TWEAKS */
+  @media (max-width: 768px) {
+    padding: 24px; // Slightly less padding on mobile
+    max-height: 75vh; // Slightly shorter to feel less "full-screen"
+    margin: 0 8px;
+
+    /* Make sure inputs don't feel too cramped */
+    .form-group {
+      margin-bottom: 20px;
+    }
+  }
+}

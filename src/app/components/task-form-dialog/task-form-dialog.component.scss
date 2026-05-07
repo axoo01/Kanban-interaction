@@ -8,6 +8,11 @@
   align-items: center;
   z-index: 1000;
   padding: 20px;
+
+  /* MOBILE: Ensure backdrop has enough padding so the modal feels like a popup */
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .dialog-content {
@@ -16,20 +21,44 @@
   border-radius: 8px;
   width: 100%;
   max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transition: background-color 0.3s ease;
 
-  /* Use :host-context to reliably detect the body class */
+  /* RESPONSIVE HEIGHT LOGIC */
+  max-height: 90vh; // Desktop default
+  overflow-y: auto;
+  transition: all 0.3s ease;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-main-purple);
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 24px; // Reduced padding for small screens
+    max-height: 90vh; // Shorter height so it doesn't feel fullscreen
+    border-radius: 6px;
+  }
+
   :host-context(.dark-theme) & {
     background-color: #2B2C37;
-    h2 { color: white; }
+
+    h2 {
+      color: white;
+    }
   }
 }
 
 .dialog-header {
   margin-bottom: 24px;
-  h2 { font-size: 18px; margin: 0; color: var(--color-black); }
+
+  h2 {
+    font-size: 18px;
+    margin: 0;
+    color: var(--color-black);
+  }
 }
 
 /* 2. FORM GROUPS & INPUTS */
@@ -37,20 +66,24 @@
   margin-bottom: 24px;
   position: relative;
 
+  @media (max-width: 768px) {
+    margin-bottom: 20px; // Tighter spacing for mobile
+  }
+
   label {
     display: block;
     font-size: 12px;
     font-weight: bold;
     color: var(--color-medium-grey);
     margin-bottom: 8px;
-    
-    /* FIX: Ensure label is white in Dark Mode */
+
     :host-context(.dark-theme) & {
       color: white !important;
     }
   }
 
-  input, textarea{
+  input,
+  textarea {
     width: 100%;
     padding: 12px 16px;
     box-sizing: border-box;
@@ -62,7 +95,9 @@
     font-family: inherit;
     outline: none;
 
-    &:focus { border-color: var(--color-main-purple); }
+    &:focus {
+      border-color: var(--color-main-purple);
+    }
 
     &.form-error {
       border-color: var(--color-red) !important;
@@ -71,12 +106,15 @@
     :host-context(.dark-theme) & {
       background-color: #2B2C37;
       color: white;
-      border: 1px solid rgba(130, 143, 163, 0.25);
-      &::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+      }
     }
   }
 }
 
+/* 3. SELECT & DROPDOWN */
 select {
   width: 100%;
   padding: 12px 16px;
@@ -87,11 +125,8 @@ select {
   font-family: inherit;
   font-size: 13px;
   cursor: pointer;
-  
-  /* THIS REMOVES THE EXTRA BROWSER ICON */
-  appearance: none; 
+  appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
 
   &:focus {
     outline: none;
@@ -106,18 +141,18 @@ select {
 
 .select-wrapper {
   position: relative;
-  
+
   .select-chevron {
     position: absolute;
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none; // Allows clicks to go through to the select menu
+    pointer-events: none;
     width: 10px;
   }
 }
 
-/* 3. BUTTONS */
+/* 4. BUTTONS */
 .btn-secondary-l {
   width: 100%;
   padding: 12px;
@@ -126,38 +161,48 @@ select {
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;
-  background-color: rgba(99, 95, 199, 0.1); 
+  background-color: rgba(99, 95, 199, 0.1);
   color: var(--color-main-purple);
   margin-bottom: 24px;
-  transition: all 0.2s ease;
 
-  /* FIX: Explicitly force white background in Dark Mode */
   :host-context(.dark-theme) & {
     background-color: white !important;
-    color: var(--color-main-purple);
   }
 
-  &:hover { opacity: 0.8; }
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
-.submit-btn { width: 100%; }
+.submit-btn {
+  width: 100%;
+}
 
-/* 4. SUBTASK ROW (Kept your working logic) */
+/* 5. SUBTASK ROW */
 .subtask-row {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 12px;
   position: relative;
-  input { flex: 1; }
+
+  input {
+    flex: 1;
+  }
 
   .remove-btn {
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0;
-    img { width: 15px; opacity: 0.5; }
-    &:hover img { opacity: 1; }
+
+    img {
+      width: 15px;
+      opacity: 0.5;
+    }
+
+    &:hover img {
+      opacity: 1;
+    }
   }
 }
 

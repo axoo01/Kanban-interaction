@@ -1,4 +1,4 @@
-import { Component, signal, inject, computed } from '@angular/core';
+import { Component, signal, inject, computed, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
 import { DialogService } from '../../services/dialog.service';
@@ -19,14 +19,33 @@ export class LayoutShellComponent {
   boardService = inject(BoardService);
   private router = inject(Router);
 
-  // 1. Updated to use the signal property currentBoard()
-  headerTitle = computed(() => 
-    this.boardService.currentBoard()?.name || 'Platform Launch'
-  );
 
   boards = this.boardService.boards;
   isSidebarHidden = signal(false);
   isOptionsMenuOpen = signal(false);
+
+  isMobileSidebarOpen = signal(false);
+  isMobileView = signal(window.innerWidth <= 768);
+
+
+  headerTitle = computed(() => 
+    this.boardService.currentBoard()?.name || 'Platform Launch'
+  );
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isMobileView.set(event.target.innerWidth <= 768);
+    if (!this.isMobileView()) this.isMobileSidebarOpen.set(false);
+  }
+
+  ngOnInit() {}
+
+  toggleMobileSidebar() {
+    if (this.isMobileView()) {
+      this.isMobileSidebarOpen.update(v => !v);
+    }
+  }
+
 
   toggleOptionsMenu() {
     this.isOptionsMenuOpen.update(val => !val);

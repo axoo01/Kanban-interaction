@@ -1,26 +1,21 @@
 <div class="app-container" [class.sidebar-hidden]="isSidebarHidden()">
-  
+
   <aside class="sidebar" role="navigation">
     <div class="logo-container">
-      <img [src]="isDarkMode() ? '/assets/logo-light.svg' : '/assets/logo-dark.svg'" 
-          alt="Kanban Logo" 
-          class="logo">
+      <img [src]="isDarkMode() ? '/assets/logo-light.svg' : '/assets/logo-dark.svg'" alt="Kanban Logo" class="logo">
     </div>
 
     <div class="nav-links">
       <p class="nav-label">ALL BOARDS ({{ boards().length }})</p>
-      
       <ul class="board-list">
         @for (board of boards(); track board.name) {
-          <li>
-            <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" 
-              routerLinkActive="active-link">
-              <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
-              {{ board.name }}
-            </a>
-          </li>
+        <li>
+          <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" routerLinkActive="active-link">
+            <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
+            {{ board.name }}
+          </a>
+        </li>
         }
-
         <li>
           <button class="btn-create-board" (click)="openCreateBoard()">
             <img src="/assets/icon-board.svg" alt="">
@@ -33,14 +28,11 @@
     <div class="sidebar-footer">
       <div class="theme-toggle">
         <img src="/assets/icon-light-theme.svg" alt="Light Theme">
-        
         <div class="toggle-switch" (click)="toggleTheme()" [class.active]="isDarkMode()">
           <div class="toggle-circle"></div>
         </div>
-        
         <img src="/assets/icon-dark-theme.svg" alt="Dark Theme">
       </div>
-
       <button class="hide-sidebar-btn" (click)="toggleSidebar()">
         <img src="/assets/icon-hide-sidebar.svg" alt="">
         Hide Sidebar
@@ -48,13 +40,46 @@
     </div>
   </aside>
 
+  @if (isMobileSidebarOpen() && isMobileView()) {
+  <div class="mobile-sidebar-backdrop" (click)="toggleMobileSidebar()">
+    <div class="mobile-sidebar-content" (click)="$event.stopPropagation()">
+      <p class="nav-label">ALL BOARDS ({{ boards().length }})</p>
+      <ul class="board-list">
+        @for (board of boards(); track board.name) {
+        <li>
+          <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" routerLinkActive="active-link"
+            (click)="isMobileSidebarOpen.set(false)">
+            <img src="/assets/icon-board.svg" alt="">
+            {{ board.name }}
+          </a>
+        </li>
+        }
+        <li>
+          <button class="btn-create-board" (click)="openCreateBoard()">
+            <img src="/assets/icon-board.svg" alt="">
+            + Create New Board
+          </button>
+        </li>
+      </ul>
+      <div class="theme-toggle-mobile">
+        <img src="/assets/icon-light-theme.svg" alt="">
+        <div class="toggle-switch" (click)="toggleTheme()" [class.active]="isDarkMode()">
+          <div class="toggle-circle"></div>
+        </div>
+        <img src="/assets/icon-dark-theme.svg" alt="">
+      </div>
+    </div>
+  </div>
+  }
+
   <div class="main-wrapper">
-    
     <header class="main-header">
-      <div class="header-left">
+      <div class="header-left" (click)="toggleMobileSidebar()" [style.cursor]="isMobileView() ? 'pointer' : 'default'">
         <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo">
-        
         <h1 class="board-title">{{ headerTitle() }}</h1>
+        @if (isMobileView()) {
+        <img src="/assets/icon-chevron-down.svg" class="chevron-mobile" [class.rotate]="isMobileSidebarOpen()" alt="">
+        }
       </div>
 
       <div class="header-right">
@@ -62,17 +87,16 @@
           <span class="desktop-only">+ Add New Task</span>
           <img src="/assets/icon-add-task-mobile.svg" class="mobile-only" alt="">
         </button>
-        
+
         <div class="options-container" style="position: relative;">
           <button class="options-btn" (click)="toggleOptionsMenu()">
             <img src="/assets/icon-vertical-ellipsis.svg" alt="Options">
           </button>
-
           @if (isOptionsMenuOpen()) {
-            <div class="options-dropdown">
-              <button (click)="openEditBoard()">Edit Board</button>
-              <button class="delete-text" (click)="onDeleteBoard()">Delete Board</button>
-            </div>
+          <div class="options-dropdown">
+            <button (click)="openEditBoard()">Edit Board</button>
+            <button class="delete-text" (click)="onDeleteBoard()">Delete Board</button>
+          </div>
           }
         </div>
       </div>
@@ -81,12 +105,11 @@
     <main class="content-area">
       <router-outlet />
     </main>
-
   </div>
 
-  @if (isSidebarHidden()) {
-    <button class="show-sidebar-floating-btn" (click)="toggleSidebar()" aria-label="Show Sidebar">
-      <img src="/assets/icon-show-sidebar.svg" alt="">
-    </button>
+  @if (isSidebarHidden() && !isMobileView()) {
+  <button class="show-sidebar-floating-btn" (click)="toggleSidebar()" aria-label="Show Sidebar">
+    <img src="/assets/icon-show-sidebar.svg" alt="">
+  </button>
   }
 </div>
