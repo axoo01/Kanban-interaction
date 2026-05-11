@@ -75,7 +75,7 @@
   <div class="main-wrapper">
     <header class="main-header">
       <div class="header-left" (click)="toggleMobileSidebar()" [style.cursor]="isMobileView() ? 'pointer' : 'default'">
-        <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo">
+        <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo mobile-only">
         <h1 class="board-title">{{ headerTitle$ | async }}</h1>
         @if (isMobileView()) {
         <img src="/assets/icon-chevron-down.svg" class="chevron-mobile" [class.rotate]="isMobileSidebarOpen()" alt="">

@@ -1,7 +1,9 @@
-import { Component, input, inject, computed, effect } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { BoardService } from '../../services/board.service';
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
+import { Task, Board } from '../../models/board.model'; // Importing your models
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-board-details',
@@ -12,19 +14,19 @@ import { DialogService } from '../../services/dialog.service';
 })
 export class BoardDetailsComponent {
   private dialogService = inject(DialogService);
-  private boardService = inject(BoardService);
-  
-  id = input.required<string>();
-  currentBoard = computed(() => this.boardService.getBoardById(this.id()));
+  public boardService = inject(BoardService);
 
-  constructor() {
-    // Synchronize the component's route ID with the service state
-    effect(() => {
-      this.boardService.setActiveBoard(this.id());
-    });
+  // 1. Reactive Input: This replaces the 'effect' and 'input.required'
+  // Whenever the URL /boards/:id changes, this setter triggers.
+  @Input() set id(boardId: string) {
+    this.boardService.setActiveBoard(boardId);
   }
 
-  // Helper for the column header dot colors
+  // 2. The Board Stream: Connecting the component to the global state
+  board$: Observable<Board | undefined> = this.boardService.currentBoard$;
+
+  // --- RESTORED HELPER METHODS ---
+
   getColumnColorClass(name: string): string {
     const status = name.toLowerCase();
     if (status.includes('todo')) return 'todo';
@@ -32,22 +34,24 @@ export class BoardDetailsComponent {
     if (status.includes('done')) return 'done';
     return 'custom';
   }
-  openTaskDetail(task: any) {
-    console.log('CLICK DETECTED: Opening task...', task.title);
-    this.dialogService.openViewTaskModal(task);
-  }
-  getCompletedSubtasks(task: any): number {
+
+  getCompletedSubtasks(task: Task): number {
     if (!task.subtasks) return 0;
-    return task.subtasks.filter((s: any) => s.isCompleted).length;
+    return task.subtasks.filter(s => s.isCompleted).length;
   }
-  openEditModal(task: any) {
-    this.dialogService.openTaskModal('edit', task); 
+
+  // --- RESTORED ACTIONS ---
+
+  openTaskDetail(task: Task) {
+    this.dialogService.openViewTaskModal(task);
   }
 
   onAddNewColumn() {
-  const board = this.currentBoard();
-  if (board) {
-    this.dialogService.openBoardModal('edit', board);
+    // We grab a quick snapshot of the current board to send to the modal
+    this.boardService.currentBoard$.subscribe(board => {
+      if (board) {
+        this.dialogService.openBoardModal('edit', board);
+      }
+    }).unsubscribe();
   }
-}
 }
