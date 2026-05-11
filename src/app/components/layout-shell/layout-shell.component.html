@@ -6,7 +6,7 @@
     </div>
 
     <div class="nav-links">
-      <p class="nav-label">ALL BOARDS ({{ boards().length }})</p>
+      <p class="nav-label">ALL BOARDS ({{ (boardService.boards$ | async)?.length }})</p>
       <ul class="board-list">
         @for (board of boards(); track board.name) {
         <li>
