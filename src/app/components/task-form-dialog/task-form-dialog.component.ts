@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } fr
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
 import { Router } from '@angular/router';
+import { map, take } from 'rxjs';
+
 
 @Component({
   selector: 'app-task-form-dialog',
@@ -15,17 +17,15 @@ import { Router } from '@angular/router';
 export class TaskFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private boardService = inject(BoardService);
-  private router = inject(Router);
   public dialogService = inject(DialogService);
 
   taskForm!: FormGroup;
   isSubmitted = false;
   dialogState = this.dialogService.state;
 
-  // DYNAMIC STATUS OPTIONS: Now it watches the BoardService for new columns!
-  statusOptions = computed(() => 
-    this.boardService.currentBoard()?.columns.map(col => col.name) || []
-  );
+  statusOptions$ = this.boardService.currentBoard$.pipe(
+  map(board => board?.columns.map((col) => col.name) || [])
+);
 
   title = computed(() => this.dialogState().mode === 'add' ? 'Add New Task' : 'Edit Task');
   submitBtnText = computed(() => this.dialogState().mode === 'add' ? 'Create Task' : 'Save Changes');
@@ -44,9 +44,17 @@ export class TaskFormDialogComponent implements OnInit {
       subtasks: this.fb.array([
         this.createSubtaskFormGroup() 
       ]),
-      // Default to the first available column in the board
-      status: [this.statusOptions()[0] || ''] 
+      status: ['']
     });
+
+   
+    if (this.dialogState().mode === 'add') {
+      this.statusOptions$.pipe(take(1)).subscribe(options => {
+        if (options.length > 0) {
+          this.taskForm.patchValue({ status: options[0] });
+        }
+      });
+    }
   }
 
   createSubtaskFormGroup(value: string = ''): FormGroup {
@@ -84,16 +92,19 @@ export class TaskFormDialogComponent implements OnInit {
   onSubmit() {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
-      const boardId = this.boardService.activeBoardId();
-      const mode = this.dialogState().mode;
+      
+      this.boardService.state$.pipe(take(1)).subscribe(state => {
+        const boardId = state.activeBoardId;
+        const mode = this.dialogState().mode;
 
-      if (mode === 'add') {
-        this.boardService.addTask(boardId, this.taskForm.value);
-      } else {
-        const originalTitle = this.dialogState().data.title;
-        this.boardService.updateTask(boardId, originalTitle, this.taskForm.value);
-      }
-      this.dialogService.close();
+        if (mode === 'add') {
+          this.boardService.addTask(boardId, this.taskForm.value);
+        } else {
+          const originalTitle = this.dialogState().data.title;
+          this.boardService.updateTask(boardId, originalTitle, this.taskForm.value);
+        }
+        this.dialogService.close();
+      });
     }
   }
 }

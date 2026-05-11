@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-task-detail-dialog',
@@ -14,18 +15,22 @@ export class TaskDetailDialogComponent implements OnInit {
   public dialogService = inject(DialogService);
   public boardService = inject(BoardService);
   
+  // 1. Local Signal for the task snapshot
   task = signal(this.dialogService.state().data);
   isOptionsMenuOpen = signal(false);
   isStatusDropdownOpen = signal(false);
 
-  // Watches for new columns automatically
-  columns = computed(() => this.boardService.currentBoard()?.columns || []);
+  // 2. Reactive Stream for columns (Replaces the computed signal)
+  columns$ = this.boardService.currentBoard$.pipe(
+    map(board => board?.columns || [])
+  );
 
   completedCount = computed(() => {
     return this.task().subtasks?.filter((s: any) => s.isCompleted).length || 0;
   });
 
   ngOnInit() {
+    // Initialize our local signal with the data passed through the dialog service
     this.task.set(this.dialogService.state().data);
   }
 
@@ -34,19 +39,32 @@ export class TaskDetailDialogComponent implements OnInit {
   }
 
   updateStatus(newStatus: string) {
-    const oldStatus = this.task().status;
+    const currentTask = this.task();
+    const oldStatus = currentTask.status;
     if (oldStatus === newStatus) return;
 
-    this.task().status = newStatus;
-    this.task.set({ ...this.task() });
+    // Update local state for immediate UI feedback
+    const updatedTask = { ...currentTask, status: newStatus };
+    this.task.set(updatedTask);
     
-    this.boardService.moveTask(this.task(), oldStatus, newStatus);
+    // Update global state
+    this.boardService.moveTask(updatedTask, oldStatus, newStatus);
     this.isStatusDropdownOpen.set(false);
   }
 
   toggleSubtask(subtask: any) {
+  
     subtask.isCompleted = !subtask.isCompleted;
-    this.task.set({ ...this.task() });
+    const updatedTask = { ...this.task() };
+    this.task.set(updatedTask);
+
+   
+    this.boardService.currentBoard$.pipe(map(board => {
+        if (board) {
+            const boardId = board.name.toLowerCase().replace(/ /g, '-');
+            this.boardService.updateTask(boardId, updatedTask.title, updatedTask);
+        }
+    })).subscribe().unsubscribe();
   }
 
   openEditForm() {

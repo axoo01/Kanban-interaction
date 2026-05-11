@@ -1,48 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
+import { Board, Column, Task } from '../models/board.model'; 
 import data from '../../../public/data.json';
 
-// 1. Define the shape of our Global State
 interface BoardState {
-  boards: any[];
+  boards: Board[];
   activeBoardId: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {
-  // 2. Initialize Internal State
   private initialState: BoardState = {
-    boards: data.boards,
+    boards: data.boards as Board[],
     activeBoardId: ''
   };
 
-  // 3. The BehaviorSubject (Private Source of Truth)
   private state = new BehaviorSubject<BoardState>(this.initialState);
-
-  // 4. Public Observables (The "Streams" components listen to)
   state$ = this.state.asObservable();
   
   boards$ = this.state$.pipe(map(s => s.boards));
   
   currentBoard$ = this.state$.pipe(
     map(s => s.boards.find(
-      b => b.name.toLowerCase().replace(/ /g, '-') === s.activeBoardId
+      (b: Board) => b.name.toLowerCase().replace(/ /g, '-') === s.activeBoardId
     ))
   );
 
-  // 5. Helper to get the raw current value when needed for logic
   private get currentState() {
     return this.state.getValue();
   }
-
-  // --- BOARD ACTIONS ---
 
   setActiveBoard(id: string) {
     this.state.next({ ...this.currentState, activeBoardId: id });
   }
 
   addBoard(boardData: any) {
-    const newBoard = {
+    const newBoard: Board = {
       name: boardData.name,
       columns: boardData.columns.map((colName: string) => ({ name: colName, tasks: [] }))
     };
@@ -53,7 +46,7 @@ export class BoardService {
   }
 
   updateBoard(oldName: string, updatedBoard: any) {
-    const updatedBoards = this.currentState.boards.map(board => {
+    const updatedBoards = this.currentState.boards.map((board: Board) => {
       if (board.name === oldName) {
         return {
           ...board,
@@ -70,18 +63,16 @@ export class BoardService {
   }
 
   deleteBoard(boardName: string) {
-    const filtered = this.currentState.boards.filter(b => b.name !== boardName);
+    const filtered = this.currentState.boards.filter((b: Board) => b.name !== boardName);
     this.state.next({ ...this.currentState, boards: filtered });
   }
 
-  // --- TASK ACTIONS ---
-
-  addTask(boardId: string, task: any) {
-    const updatedBoards = this.currentState.boards.map(board => {
+  addTask(boardId: string, taskValue: any) {
+    const updatedBoards = this.currentState.boards.map((board: Board) => {
       if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
-        const column = board.columns.find(col => col.name === task.status);
+        const column = board.columns.find((col: Column) => col.name === taskValue.status);
         if (column) {
-          column.tasks = [...column.tasks, this.formatTask(task)];
+          column.tasks = [...column.tasks, this.formatTask(taskValue)];
         }
       }
       return board;
@@ -90,18 +81,16 @@ export class BoardService {
   }
 
   updateTask(boardId: string, oldTaskTitle: string, updatedTask: any) {
-    const updatedBoards = this.currentState.boards.map(board => {
+    const updatedBoards = this.currentState.boards.map((board: Board) => {
       if (board.name.toLowerCase().replace(/ /g, '-') === boardId) {
-        board.columns.forEach(col => {
-          const taskIndex = col.tasks.findIndex(t => t.title === oldTaskTitle);
+        board.columns.forEach((col: Column) => {
+          const taskIndex = col.tasks.findIndex((t: Task) => t.title === oldTaskTitle);
           if (taskIndex !== -1) {
             if (col.name !== updatedTask.status) {
-              // Move to new column
               col.tasks.splice(taskIndex, 1);
-              const newCol = board.columns.find(c => c.name === updatedTask.status);
+              const newCol = board.columns.find((c: Column) => c.name === updatedTask.status);
               newCol?.tasks.push(this.formatTask(updatedTask));
             } else {
-              // Update in place
               col.tasks[taskIndex] = this.formatTask(updatedTask);
             }
           }
@@ -113,21 +102,21 @@ export class BoardService {
   }
 
   deleteTask(taskTitle: string, columnStatus: string) {
-    const updatedBoards = this.currentState.boards.map(board => ({
+    const updatedBoards = this.currentState.boards.map((board: Board) => ({
       ...board,
-      columns: board.columns.map(col => col.name === columnStatus 
-        ? { ...col, tasks: col.tasks.filter(t => t.title !== taskTitle) } 
+      columns: board.columns.map((col: Column) => col.name === columnStatus 
+        ? { ...col, tasks: col.tasks.filter((t: Task) => t.title !== taskTitle) } 
         : col
       )
     }));
     this.state.next({ ...this.currentState, boards: updatedBoards });
   }
 
-  moveTask(task: any, oldStatus: string, newStatus: string) {
-    const updatedBoards = this.currentState.boards.map(board => ({
+  moveTask(task: Task, oldStatus: string, newStatus: string) {
+    const updatedBoards = this.currentState.boards.map((board: Board) => ({
       ...board,
-      columns: board.columns.map(col => {
-        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter(t => t.title !== task.title) };
+      columns: board.columns.map((col: Column) => {
+        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter((t: Task) => t.title !== task.title) };
         if (col.name === newStatus) return { ...col, tasks: [...col.tasks, { ...task, status: newStatus }] };
         return col;
       })
@@ -135,7 +124,7 @@ export class BoardService {
     this.state.next({ ...this.currentState, boards: updatedBoards });
   }
 
-  private formatTask(formValue: any) {
+  private formatTask(formValue: any): Task {
     return {
       title: formValue.title,
       description: formValue.description,
