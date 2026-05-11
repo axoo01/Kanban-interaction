@@ -6,9 +6,9 @@
     </div>
 
     <div class="nav-links">
-      <p class="nav-label">ALL BOARDS ({{ (boardService.boards$ | async)?.length }})</p>
+      <p class="nav-label">ALL BOARDS ({{ (boards$ | async)?.length || 0 }})</p>
       <ul class="board-list">
-        @for (board of boards(); track board.name) {
+        @for (board of (boards$ | async); track board.name) {
         <li>
           <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" routerLinkActive="active-link">
             <img src="/assets/icon-board.svg" alt="" aria-hidden="true">
@@ -43,9 +43,9 @@
   @if (isMobileSidebarOpen() && isMobileView()) {
   <div class="mobile-sidebar-backdrop" (click)="toggleMobileSidebar()">
     <div class="mobile-sidebar-content" (click)="$event.stopPropagation()">
-      <p class="nav-label">ALL BOARDS ({{ boards().length }})</p>
+      <p class="nav-label">ALL BOARDS ({{ (boards$ | async)?.length || 0 }})</p>
       <ul class="board-list">
-        @for (board of boards(); track board.name) {
+        @for (board of (boards$ | async); track board.name) {
         <li>
           <a [routerLink]="['/boards', board.name.toLowerCase().replace(' ', '-')]" routerLinkActive="active-link"
             (click)="isMobileSidebarOpen.set(false)">
@@ -76,7 +76,7 @@
     <header class="main-header">
       <div class="header-left" (click)="toggleMobileSidebar()" [style.cursor]="isMobileView() ? 'pointer' : 'default'">
         <img src="/assets/logo-mobile.svg" alt="Kanban" class="mobile-logo">
-        <h1 class="board-title">{{ headerTitle() }}</h1>
+        <h1 class="board-title">{{ headerTitle$ | async }}</h1>
         @if (isMobileView()) {
         <img src="/assets/icon-chevron-down.svg" class="chevron-mobile" [class.rotate]="isMobileSidebarOpen()" alt="">
         }
