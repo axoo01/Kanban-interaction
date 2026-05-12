@@ -90,21 +90,20 @@ export class TaskFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSubmitted = true;
-    if (this.taskForm.valid) {
-      
-      this.boardService.state$.pipe(take(1)).subscribe(state => {
-        const boardId = state.activeBoardId;
-        const mode = this.dialogState().mode;
+  this.isSubmitted = true;
+  if (this.taskForm.valid) {
+    
+    this.boardService.activeBoardId$.pipe(take(1)).subscribe(boardId => {
+      const mode = this.dialogState().mode;
 
-        if (mode === 'add') {
-          this.boardService.addTask(boardId, this.taskForm.value);
-        } else {
-          const originalTitle = this.dialogState().data.title;
-          this.boardService.updateTask(boardId, originalTitle, this.taskForm.value);
-        }
-        this.dialogService.close();
-      });
-    }
+      if (mode === 'add') {
+        this.boardService.addTask(boardId, this.taskForm.value);
+      } else {
+        const originalTitle = this.dialogState().data.title;
+        this.boardService.updateTask(boardId, originalTitle, this.taskForm.value);
+      }
+      this.dialogService.close();
+    });
   }
+}
 }
