@@ -29,10 +29,44 @@ export const boardReducer = createReducer(
     return { ...state, boards: [...state.boards, newBoard] };
   }),
 
-  on(BoardActions.deleteBoard, (state, { boardName }) => ({
-    ...state,
-    boards: state.boards.filter(b => b.name !== boardName)
-  }))
+  // --- TASK REDUCERS ---
 
-  
+  on(BoardActions.addTask, (state, { boardId, task }) => ({
+    ...state,
+    boards: state.boards.map(b => {
+      if (b.name.toLowerCase().replace(/ /g, '-') === boardId) {
+        return {
+          ...b,
+          columns: b.columns.map(col => col.name === task.status 
+            ? { ...col, tasks: [...col.tasks, task] } 
+            : col
+          )
+        };
+      }
+      return b;
+    })
+  })),
+
+  on(BoardActions.deleteTask, (state, { taskTitle, columnStatus }) => ({
+    ...state,
+    boards: state.boards.map(board => ({
+      ...board,
+      columns: board.columns.map(col => col.name === columnStatus 
+        ? { ...col, tasks: col.tasks.filter(t => t.title !== taskTitle) } 
+        : col
+      )
+    }))
+  })),
+
+  on(BoardActions.moveTask, (state, { task, oldStatus, newStatus }) => ({
+    ...state,
+    boards: state.boards.map(board => ({
+      ...board,
+      columns: board.columns.map(col => {
+        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter(t => t.title !== task.title) };
+        if (col.name === newStatus) return { ...col, tasks: [...col.tasks, { ...task, status: newStatus }] };
+        return col;
+      })
+    }))
+  }))
 );
