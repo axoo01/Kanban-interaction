@@ -66,24 +66,24 @@ export const boardReducer = createReducer(
     ...state,
     boards: state.boards.map(b => {
       if (b.name.toLowerCase().replace(/ /g, '-') === boardId) {
-        // Deep map to find the task and update it
+        
         const newCols = b.columns.map(col => {
           const taskIdx = col.tasks.findIndex(t => t.title === oldTaskTitle);
           if (taskIdx === -1) return col;
 
           const updatedTasks = [...col.tasks];
           if (col.name !== updatedTask.status) {
-            // Task moved columns
+            
             updatedTasks.splice(taskIdx, 1);
             return { ...col, tasks: updatedTasks };
           } else {
-            // Task stayed in same column
+            
             updatedTasks[taskIdx] = updatedTask;
             return { ...col, tasks: updatedTasks };
           }
         });
 
-        // If it moved columns, we need to push it to the destination
+        
         const finalCols = newCols.map(col => {
           if (col.name === updatedTask.status && !col.tasks.some(t => t.title === updatedTask.title)) {
             return { ...col, tasks: [...col.tasks, updatedTask] };

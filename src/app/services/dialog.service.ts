@@ -38,7 +38,7 @@ export class DialogService {
     this.dialogState.set({ 
       isOpen: true, 
       type: 'delete', 
-      mode: 'edit', // Placeholder mode
+      mode: 'edit', 
       data 
     });
   }

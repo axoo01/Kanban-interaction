@@ -15,12 +15,12 @@ export class TaskDetailDialogComponent implements OnInit {
   public dialogService = inject(DialogService);
   public boardService = inject(BoardService);
   
-  // 1. Local Signal for the task snapshot
+  
   task = signal(this.dialogService.state().data);
   isOptionsMenuOpen = signal(false);
   isStatusDropdownOpen = signal(false);
 
-  // 2. Reactive Stream for columns (Replaces the computed signal)
+  
   columns$ = this.boardService.currentBoard$.pipe(
     map(board => board?.columns || [])
   );
@@ -30,7 +30,7 @@ export class TaskDetailDialogComponent implements OnInit {
   });
 
   ngOnInit() {
-    // Initialize our local signal with the data passed through the dialog service
+   
     this.task.set(this.dialogService.state().data);
   }
 

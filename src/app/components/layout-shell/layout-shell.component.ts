@@ -17,17 +17,17 @@ export class LayoutShellComponent implements OnInit {
   private themeService = inject(ThemeService);
   private dialogService = inject(DialogService);
   private router = inject(Router);
-  public boardService = inject(BoardService); // Public for template access
+  public boardService = inject(BoardService); 
 
-  // 1. Reactive Streams from Service
+  
   boards$ = this.boardService.boards$;
   
-  // Derived stream for the header title
+  
   headerTitle$ = this.boardService.currentBoard$.pipe(
     map(board => board?.name || 'Platform Launch')
   );
 
-  // 2. Local UI State (Keep as Signals - they are local to this component)
+  
   isDarkMode = this.themeService.darkMode;
   isSidebarHidden = signal(false);
   isOptionsMenuOpen = signal(false);
@@ -65,17 +65,17 @@ export class LayoutShellComponent implements OnInit {
   }
 
   openCreateBoard() {
-    this.isMobileSidebarOpen.set(false); // Close dropdown on mobile
+    this.isMobileSidebarOpen.set(false); 
     this.dialogService.openBoardModal('add');
   }
 
-  // --- ACTIONS REQUIRING DATA SNAPSHOTS ---
+  
 
   openEditBoard() {
-    // We get the current value from the service stream for one-off logic
+    
     this.boardService.currentBoard$.pipe(map(board => {
       if (board) this.dialogService.openBoardModal('edit', board);
-    })).subscribe().unsubscribe(); // Quick sub/unsub pattern for actions
+    })).subscribe().unsubscribe(); 
   }
 
   onDeleteBoard() {
@@ -90,7 +90,7 @@ export class LayoutShellComponent implements OnInit {
         onConfirm: () => {
           this.boardService.deleteBoard(currentBoard.name);
           
-          // Navigation logic after deletion
+          
           this.boardService.boards$.pipe(map(boards => {
             if (boards.length > 0) {
               const nextId = boards[0].name.toLowerCase().replace(/ /g, '-');

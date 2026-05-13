@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './board-form-dialog.component.html',
-  styleUrl: './board-form-dialog.component.scss' // Reuses Task SCSS patterns
+  styleUrl: './board-form-dialog.component.scss' 
 })
 export class BoardFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
