@@ -6,6 +6,8 @@ export const BoardActions = createActionGroup({
   events: {
     // 1. Initial Load
     'Load Boards': emptyProps(),
+    'Load Boards Success': props<{ boards: Board[] }>(), 
+    'Load Boards Failure': props<{ error: string }>(),
     
     // 2. Navigation / Selection
     'Select Board': props<{ boardId: string }>(),

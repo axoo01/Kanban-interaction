@@ -8,10 +8,16 @@ import { Board, Task } from '../models/board.model';
 export class BoardService {
   private store = inject(Store);
 
+  constructor() {
+    this.store.dispatch(BoardActions.loadBoards());
+  }
+
   // 1. Reactive Streams via Selectors
   boards$ = this.store.select(selectAllBoards);
   currentBoard$ = this.store.select(selectCurrentBoard);
   activeBoardId$ = this.store.select(selectActiveBoardId);
+
+
 
   // --- BOARD ACTIONS (Dispatched to Store) ---
 
