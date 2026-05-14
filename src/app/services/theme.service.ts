@@ -4,12 +4,15 @@ import { Injectable, signal, effect } from '@angular/core';
   providedIn: 'root'
 })
 export class ThemeService {
-  
-  darkMode = signal<boolean>(false);
+ 
+  darkMode = signal<boolean>(localStorage.getItem('theme') === 'dark');
 
   constructor() {
    
     effect(() => {
+      const mode = this.darkMode() ? 'dark' : 'light';
+      localStorage.setItem('theme', mode);
+      
       if (this.darkMode()) {
         document.body.classList.add('dark-theme');
       } else {
@@ -19,6 +22,6 @@ export class ThemeService {
   }
 
   toggleTheme() {
-    this.darkMode.update(active => !active);
+    this.darkMode.update(val => !val);
   }
 }

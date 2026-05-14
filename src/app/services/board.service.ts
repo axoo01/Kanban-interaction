@@ -20,9 +20,8 @@ export class BoardService {
 
  
   setActiveBoard(id: string) {
-    this.store.dispatch(BoardActions.selectBoard({ boardId: id }));
-  }
-
+  this.store.dispatch(BoardActions.selectBoard({ boardId: id }));
+}
   addBoard(boardData: any) {
     this.store.dispatch(BoardActions.addBoard({ board: boardData }));
   }

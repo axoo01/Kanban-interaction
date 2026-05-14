@@ -38,24 +38,24 @@ export class TaskFormDialogComponent implements OnInit {
   }
 
   initForm() {
-    this.taskForm = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      subtasks: this.fb.array([
-        this.createSubtaskFormGroup() 
-      ]),
-      status: ['']
-    });
+  this.taskForm = this.fb.group({
+    title: ['', Validators.required],
+    description: [''],
+    subtasks: this.fb.array([
+      this.createSubtaskFormGroup() 
+    ]),
+    status: ['', Validators.required] // Adding validators
+  });
 
    
     if (this.dialogState().mode === 'add') {
-      this.statusOptions$.pipe(take(1)).subscribe(options => {
-        if (options.length > 0) {
-          this.taskForm.patchValue({ status: options[0] });
-        }
-      });
-    }
+    this.statusOptions$.pipe(take(1)).subscribe(options => {
+      if (options.length > 0) {
+        this.taskForm.patchValue({ status: options[0] });
+      }
+    });
   }
+}
 
   createSubtaskFormGroup(value: string = ''): FormGroup {
     return this.fb.group({
@@ -77,17 +77,18 @@ export class TaskFormDialogComponent implements OnInit {
   }
 
   patchEditData(data: any) {
-    this.subtasksFormArray.clear();
-    data.subtasks.forEach((st: any) => {
-      this.subtasksFormArray.push(this.createSubtaskFormGroup(st.title));
-    });
-
+  this.subtasksFormArray.clear();
+  data.subtasks.forEach((st: any) => {
+    this.subtasksFormArray.push(this.createSubtaskFormGroup(st.title));
+  });
+  this.statusOptions$.pipe(take(1)).subscribe(() => {
     this.taskForm.patchValue({
       title: data.title,
       description: data.description,
       status: data.status
     });
-  }
+  });
+}
 
   onSubmit() {
   this.isSubmitted = true;

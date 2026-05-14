@@ -2,7 +2,7 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
-import { map } from 'rxjs';
+import { map, take } from 'rxjs';
 
 @Component({
   selector: 'app-task-detail-dialog',
@@ -43,29 +43,42 @@ export class TaskDetailDialogComponent implements OnInit {
     const oldStatus = currentTask.status;
     if (oldStatus === newStatus) return;
 
-    // Update local state for immediate UI feedback
+    
     const updatedTask = { ...currentTask, status: newStatus };
     this.task.set(updatedTask);
     
-    // Update global state
+    
     this.boardService.moveTask(updatedTask, oldStatus, newStatus);
     this.isStatusDropdownOpen.set(false);
   }
 
-  toggleSubtask(subtask: any) {
   
-    subtask.isCompleted = !subtask.isCompleted;
-    const updatedTask = { ...this.task() };
-    this.task.set(updatedTask);
+toggleSubtask(subtask: any) {
+  
+  const updatedSubtasks = this.task().subtasks.map((st: any) => 
+    st.title === subtask.title 
+      ? { ...st, isCompleted: !st.isCompleted } 
+      : st
+  );
 
-   
-    this.boardService.currentBoard$.pipe(map(board => {
-        if (board) {
-            const boardId = board.name.toLowerCase().replace(/ /g, '-');
-            this.boardService.updateTask(boardId, updatedTask.title, updatedTask);
-        }
-    })).subscribe().unsubscribe();
-  }
+ 
+  const updatedTask = { ...this.task(), subtasks: updatedSubtasks };
+  
+  
+  this.task.set(updatedTask);
+
+  
+  this.boardService.currentBoard$.pipe(
+    take(1),
+    map(board => {
+      if (board) {
+        const boardId = board.name.toLowerCase().replace(/ /g, '-');
+       
+        this.boardService.updateTask(boardId, updatedTask.title, updatedTask);
+      }
+    })
+  ).subscribe();
+}
 
   openEditForm() {
     this.isOptionsMenuOpen.set(false);
