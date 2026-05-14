@@ -1,27 +1,50 @@
 import { createReducer, on } from '@ngrx/store';
 import { BoardActions } from './board.actions';
 import { Board, Column, Task } from '../../models/board.model';
-import data from '../../../../public/data.json';
 
 export interface BoardState {
   boards: Board[];
   activeBoardId: string;
+  isLoading: boolean;
+  error: string | null; 
 }
 
 export const initialState: BoardState = {
-  boards: data.boards as Board[],
-  activeBoardId: ''
+  boards: [], 
+  activeBoardId: '',
+  isLoading: false,
+  error: null
 };
 
 export const boardReducer = createReducer(
   initialState,
 
-  on(BoardActions.selectBoard, (state, { boardId }) => ({
+  
+  on(BoardActions.loadBoards, (state): BoardState => ({
+    ...state,
+    isLoading: true,
+    error: null
+  })),
+
+  on(BoardActions.loadBoardsSuccess, (state, { boards }): BoardState => ({
+    ...state,
+    boards,
+    isLoading: false
+  })),
+
+  on(BoardActions.loadBoardsFailure, (state, { error }): BoardState => ({
+    ...state,
+    isLoading: false,
+    error
+  })),
+
+  
+  on(BoardActions.selectBoard, (state, { boardId }): BoardState => ({
     ...state,
     activeBoardId: boardId
   })),
 
-  on(BoardActions.addBoard, (state, { board }) => {
+  on(BoardActions.addBoard, (state, { board }): BoardState => {
     const newBoard: Board = {
       name: board.name,
       columns: board.columns.map((colName: string) => ({ name: colName, tasks: [] }))
@@ -29,9 +52,9 @@ export const boardReducer = createReducer(
     return { ...state, boards: [...state.boards, newBoard] };
   }),
 
-  on(BoardActions.updateBoard, (state, { oldName, updatedBoard }) => ({
+  on(BoardActions.updateBoard, (state, { oldName, updatedBoard }): BoardState => ({
     ...state,
-    boards: state.boards.map(b => b.name === oldName ? {
+    boards: state.boards.map((b: Board) => b.name === oldName ? {
       ...b,
       name: updatedBoard.name,
       columns: updatedBoard.columns.map((colName: string, index: number) => ({
@@ -41,18 +64,18 @@ export const boardReducer = createReducer(
     } : b)
   })),
 
-  on(BoardActions.deleteBoard, (state, { boardName }) => ({
+  on(BoardActions.deleteBoard, (state, { boardName }): BoardState => ({
     ...state,
-    boards: state.boards.filter(b => b.name !== boardName)
+    boards: state.boards.filter((b: Board) => b.name !== boardName)
   })),
 
-  on(BoardActions.addTask, (state, { boardId, task }) => ({
+  on(BoardActions.addTask, (state, { boardId, task }): BoardState => ({
     ...state,
-    boards: state.boards.map(b => {
+    boards: state.boards.map((b: Board) => {
       if (b.name.toLowerCase().replace(/ /g, '-') === boardId) {
         return {
           ...b,
-          columns: b.columns.map(col => col.name === task.status 
+          columns: b.columns.map((col: Column) => col.name === task.status 
             ? { ...col, tasks: [...col.tasks, task] } 
             : col
           )
@@ -62,30 +85,26 @@ export const boardReducer = createReducer(
     })
   })),
 
-  on(BoardActions.updateTask, (state, { boardId, oldTaskTitle, updatedTask }) => ({
+  on(BoardActions.updateTask, (state, { boardId, oldTaskTitle, updatedTask }): BoardState => ({
     ...state,
-    boards: state.boards.map(b => {
+    boards: state.boards.map((b: Board) => {
       if (b.name.toLowerCase().replace(/ /g, '-') === boardId) {
-        
-        const newCols = b.columns.map(col => {
-          const taskIdx = col.tasks.findIndex(t => t.title === oldTaskTitle);
+        const newCols = b.columns.map((col: Column) => {
+          const taskIdx = col.tasks.findIndex((t: Task) => t.title === oldTaskTitle);
           if (taskIdx === -1) return col;
 
           const updatedTasks = [...col.tasks];
           if (col.name !== updatedTask.status) {
-            
             updatedTasks.splice(taskIdx, 1);
             return { ...col, tasks: updatedTasks };
           } else {
-            
             updatedTasks[taskIdx] = updatedTask;
             return { ...col, tasks: updatedTasks };
           }
         });
 
-        
-        const finalCols = newCols.map(col => {
-          if (col.name === updatedTask.status && !col.tasks.some(t => t.title === updatedTask.title)) {
+        const finalCols = newCols.map((col: Column) => {
+          if (col.name === updatedTask.status && !col.tasks.some((t: Task) => t.title === updatedTask.title)) {
             return { ...col, tasks: [...col.tasks, updatedTask] };
           }
           return col;
@@ -97,23 +116,23 @@ export const boardReducer = createReducer(
     })
   })),
 
-  on(BoardActions.deleteTask, (state, { taskTitle, columnStatus }) => ({
+  on(BoardActions.deleteTask, (state, { taskTitle, columnStatus }): BoardState => ({
     ...state,
-    boards: state.boards.map(board => ({
+    boards: state.boards.map((board: Board) => ({
       ...board,
-      columns: board.columns.map(col => col.name === columnStatus 
-        ? { ...col, tasks: col.tasks.filter(t => t.title !== taskTitle) } 
+      columns: board.columns.map((col: Column) => col.name === columnStatus 
+        ? { ...col, tasks: col.tasks.filter((t: Task) => t.title !== taskTitle) } 
         : col
       )
     }))
   })),
 
-  on(BoardActions.moveTask, (state, { task, oldStatus, newStatus }) => ({
+  on(BoardActions.moveTask, (state, { task, oldStatus, newStatus }): BoardState => ({
     ...state,
-    boards: state.boards.map(board => ({
+    boards: state.boards.map((board: Board) => ({
       ...board,
-      columns: board.columns.map(col => {
-        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter(t => t.title !== task.title) };
+      columns: board.columns.map((col: Column) => {
+        if (col.name === oldStatus) return { ...col, tasks: col.tasks.filter((t: Task) => t.title !== task.title) };
         if (col.name === newStatus) return { ...col, tasks: [...col.tasks, { ...task, status: newStatus }] };
         return col;
       })

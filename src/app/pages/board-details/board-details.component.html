@@ -1,5 +1,10 @@
+@if (boardService.isLoading$ | async) {
+<div class="loading-overlay">
+  <div class="spinner"></div>
+  <p>Loading your boards...</p>
+</div>
+} @else {
 <div class="board-container" *ngIf="board$ | async as board">
-
   @if (board.columns.length === 0) {
   <div class="empty-board">
     <p>This board is empty. Create a new column to get started.</p>
@@ -31,3 +36,4 @@
   </div>
   }
 </div>
+}

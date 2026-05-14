@@ -1,26 +1,24 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BoardActions } from '../store/board/board.actions';
-import { selectAllBoards, selectCurrentBoard, selectActiveBoardId } from '../store/board/board.selectors';
+import { selectAllBoards, selectCurrentBoard, selectActiveBoardId, selectIsLoading, selectBoardError } from '../store/board/board.selectors';
 import { Board, Task } from '../models/board.model';
 
 @Injectable({ providedIn: 'root' })
 export class BoardService {
   private store = inject(Store);
 
+  boards$ = this.store.select(selectAllBoards);
+  currentBoard$ = this.store.select(selectCurrentBoard);
+  activeBoardId$ = this.store.select(selectActiveBoardId);
+  isLoading$ = this.store.select(selectIsLoading); 
+  error$ = this.store.select(selectBoardError); 
+
   constructor() {
     this.store.dispatch(BoardActions.loadBoards());
   }
 
-  // 1. Reactive Streams via Selectors
-  boards$ = this.store.select(selectAllBoards);
-  currentBoard$ = this.store.select(selectCurrentBoard);
-  activeBoardId$ = this.store.select(selectActiveBoardId);
-
-
-
-  // --- BOARD ACTIONS (Dispatched to Store) ---
-
+ 
   setActiveBoard(id: string) {
     this.store.dispatch(BoardActions.selectBoard({ boardId: id }));
   }
@@ -36,8 +34,6 @@ export class BoardService {
   deleteBoard(boardName: string) {
     this.store.dispatch(BoardActions.deleteBoard({ boardName }));
   }
-
-  // --- TASK ACTIONS (Dispatched to Store) ---
 
   addTask(boardId: string, task: any) {
     this.store.dispatch(BoardActions.addTask({ boardId, task: this.formatTask(task) }));
