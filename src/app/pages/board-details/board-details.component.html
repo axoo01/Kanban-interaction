@@ -3,6 +3,17 @@
   <div class="spinner"></div>
   <p>Loading your boards...</p>
 </div>
+} @else if (boardService.error$ | async) {
+<div class="loading-overlay">
+  <div class="error-banner">
+    <div class="error-icon">⚠️</div>
+    <div class="error-content">
+      <h3>An error occurred</h3>
+      <p>{{ boardService.error$ | async }}</p>
+    </div>
+    <button class="btn-retry" (click)="onRetry()">Retry Connection</button>
+  </div>
+</div>
 } @else {
 <div class="board-container" *ngIf="board$ | async as board">
   @if (board.columns.length === 0) {

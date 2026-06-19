@@ -15,6 +15,10 @@ export class BoardService {
   error$ = this.store.select(selectBoardError); 
 
   constructor() {
+    this.loadBoards();
+  }
+
+  loadBoards() {
     this.store.dispatch(BoardActions.loadBoards());
   }
 

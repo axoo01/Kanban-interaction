@@ -22,6 +22,10 @@ export class BoardDetailsComponent {
     this.boardService.setActiveBoard(boardId);
   }
 
+  onRetry() {
+    this.boardService.loadBoards();
+  }
+
   // 2. The Board Stream: Connecting the component to the global state
   board$: Observable<Board | undefined> = this.boardService.currentBoard$;
 
