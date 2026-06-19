@@ -6,6 +6,7 @@ import { boardReducer } from './store/board/board.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { BoardEffects } from './store/board/board.effects';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
     provideEffects([BoardEffects]),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withComponentInputBinding()) 
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient()
   ]
 };
