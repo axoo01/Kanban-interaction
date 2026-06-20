@@ -30,6 +30,9 @@ export class BoardFormDialogComponent implements OnInit {
     if (this.state().mode === 'edit' && this.state().data) {
       this.patchForm(this.state().data);
     }
+    this.boardForm.valueChanges.subscribe(() => {
+      this.dialogService.setFormDirty(this.boardForm.dirty);
+    });
   }
 
   initForm() {
@@ -62,6 +65,7 @@ export class BoardFormDialogComponent implements OnInit {
   onSubmit() {
     this.isSubmitted = true;
     if (this.boardForm.valid) {
+      this.dialogService.setFormDirty(false);
       const boardName = this.boardForm.value.name;
 
       if (this.state().mode === 'add') {

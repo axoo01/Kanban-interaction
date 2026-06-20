@@ -298,7 +298,7 @@
               "subtasks": [
                 {
                   "title": "Find hunter",
-                  "isCompleted": false
+                  "isCompleted": true
                 },
                 {
                   "title": "Gather assets",
@@ -318,7 +318,7 @@
                 },
                 {
                   "title": "Launch!",
-                  "isCompleted": false
+                  "isCompleted": true
                 }
               ]
             },
@@ -428,6 +428,25 @@
           "tasks": []
         }
       ]
+    },
+    {
+      "id": "MUzXlL54rcw",
+      "name": "Strategic Launch",
+      "columns": [
+        {
+          "name": "Todo",
+          "tasks": []
+        },
+        {
+          "name": "Doing",
+          "tasks": []
+        },
+        {
+          "name": "Done",
+          "tasks": []
+        }
+      ]
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

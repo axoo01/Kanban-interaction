@@ -35,6 +35,9 @@ export class TaskFormDialogComponent implements OnInit {
     if (this.dialogState().mode === 'edit' && this.dialogState().data) {
       this.patchEditData(this.dialogState().data);
     }
+    this.taskForm.valueChanges.subscribe(() => {
+      this.dialogService.setFormDirty(this.taskForm.dirty);
+    });
   }
 
   initForm() {
@@ -93,7 +96,7 @@ export class TaskFormDialogComponent implements OnInit {
   onSubmit() {
   this.isSubmitted = true;
   if (this.taskForm.valid) {
-    
+    this.dialogService.setFormDirty(false);
     this.boardService.activeBoardId$.pipe(take(1)).subscribe(boardId => {
       const mode = this.dialogState().mode;
 

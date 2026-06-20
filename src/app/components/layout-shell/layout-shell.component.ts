@@ -40,6 +40,14 @@ export class LayoutShellComponent implements OnInit {
     if (!this.isMobileView()) this.isMobileSidebarOpen.set(false);
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.options-container')) {
+      this.isOptionsMenuOpen.set(false);
+    }
+  }
+
   ngOnInit() {}
 
   toggleMobileSidebar() {

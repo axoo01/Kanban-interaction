@@ -1,12 +1,18 @@
 import { CanDeactivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { DialogService } from '../services/dialog.service';
 
-export const unsavedChangesGuard: CanDeactivateFn<any> = (component) => {
-  // Logic: If the component has a specific flag, ask for confirmation
-  // For now, we'll use a simple window confirm
-  const hasUnsavedChanges = false; // Usually linked to a form.dirty state
+export const unsavedChangesGuard: CanDeactivateFn<any> = () => {
+  const dialogService = inject(DialogService);
 
-  if (hasUnsavedChanges) {
-    return window.confirm('You have unsaved changes. Do you really want to leave?');
+  if (dialogService.isFormDirty()) {
+    const leave = window.confirm('You have unsaved changes. Do you really want to leave?');
+    if (leave) {
+      dialogService.setFormDirty(false);
+      dialogService.close();
+      return true;
+    }
+    return false;
   }
   return true;
 };

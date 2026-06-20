@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core'; 
+import { Component, inject, signal, computed, OnInit, HostListener } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
@@ -15,10 +15,17 @@ export class TaskDetailDialogComponent implements OnInit {
   public dialogService = inject(DialogService);
   public boardService = inject(BoardService);
   
-  
   task = signal(this.dialogService.state().data);
   isOptionsMenuOpen = signal(false);
   isStatusDropdownOpen = signal(false);
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.options-container')) {
+      this.isOptionsMenuOpen.set(false);
+    }
+  }
 
   
   columns$ = this.boardService.currentBoard$.pipe(

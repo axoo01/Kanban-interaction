@@ -101,6 +101,11 @@
         &:hover:not(.active-link) {
           background-color: white !important;
           color: var(--color-main-purple) !important;
+
+          img {
+            filter: none !important;
+            opacity: 1;
+          }
         }
       }
     }
