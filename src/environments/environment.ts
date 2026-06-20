@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000' // Can be configured later for deployment, or point to local mock in dev-prod
+  apiUrl: 'https://my-json-server.typicode.com/axoo01/Kanban-interaction'
 };
