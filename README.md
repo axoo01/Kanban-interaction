@@ -43,9 +43,10 @@ kanban-task-mgt-interaction/
 
 ## Live Deployment & Cloud Infrastructure
 
+* **Frontend Angular Client (Vercel):** https://kanban-task-webapp.vercel.app
+* **Backend Serverless API (Vercel):** https://kanban-backend-api-nine.vercel.app
+* **Health Check Endpoint:** https://kanban-backend-api-nine.vercel.app/health
 * **Cloud Database:** Neon PostgreSQL (`ep-misty-waterfall-b56zqq0f`)
-* **Backend Serverless API (Vercel):** `https://kanban-backend-api-nine.vercel.app`
-* **Frontend Angular Client (Vercel):** `https://<your-frontend-app>.vercel.app` *(Placeholder - ready for deployment)*
 
 ### Live Demo Credentials
 * **Admin User:** `admin@kanban.local` / `Password123!`
