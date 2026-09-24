@@ -73,7 +73,7 @@ describe('Board & Column Endpoints (/boards, /columns)', () => {
     });
   });
 
-  describe('GET /boards/:id', () => {
+  describe('GET /boards/:id & GET /boards/:id/activities', () => {
     it('should hydrate complete nested board shape with columns', async () => {
       const res = await request(app)
         .get(`/boards/${createdBoardId}`)
@@ -83,6 +83,17 @@ describe('Board & Column Endpoints (/boards, /columns)', () => {
       expect(res.body.status).toBe('success');
       expect(res.body.data.id).toBe(createdBoardId);
       expect(res.body.data.columns).toBeDefined();
+    });
+
+    it('should return recent board activities', async () => {
+      const res = await request(app)
+        .get(`/boards/${createdBoardId}/activities`)
+        .set('Authorization', `Bearer ${ownerToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('success');
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.length).toBeGreaterThanOrEqual(1);
     });
   });
 

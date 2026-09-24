@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BoardService } from '../services/board.service.js';
 import { ColumnService } from '../services/column.service.js';
+import { ActivityService } from '../services/activity.service.js';
 import { sendSuccess, sendError } from '../utils/response.js';
 
 export class BoardController {
@@ -85,6 +86,20 @@ export class BoardController {
       sendSuccess(res, column, 201);
     } catch (error: any) {
       sendError(res, error.message || 'Failed to add column to board', error.statusCode || 400);
+    }
+  };
+
+  static getActivities = async (req: Request, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        sendError(res, 'Authentication required', 401);
+        return;
+      }
+      const id = req.params.id as string;
+      const logs = await ActivityService.getBoardActivities(id, req.user.id);
+      sendSuccess(res, logs, 200);
+    } catch (error: any) {
+      sendError(res, error.message || 'Failed to fetch board activity logs', error.statusCode || 400);
     }
   };
 }

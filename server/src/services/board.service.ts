@@ -1,6 +1,7 @@
 import { prisma } from '../config/database.js';
 import { CreateBoardInput, UpdateBoardInput, AddCollaboratorInput } from '../validators/board.validator.js';
 import { BoardRole } from '@prisma/client';
+import { ActivityService } from './activity.service.js';
 
 export class BoardService {
   static async createBoard(userId: string, input: CreateBoardInput) {
@@ -30,6 +31,8 @@ export class BoardService {
         collaborators: true
       }
     });
+
+    await ActivityService.logActivity(board.id, userId, 'BOARD_CREATED', `Created board "${board.name}"`);
 
     return board;
   }

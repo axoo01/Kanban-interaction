@@ -1,6 +1,7 @@
 import { prisma } from '../config/database.js';
 import { CreateTaskInput, UpdateTaskInput, MoveTaskInput } from '../validators/task.validator.js';
 import { BoardRole } from '@prisma/client';
+import { ActivityService } from './activity.service.js';
 
 export class TaskService {
   private static async verifyBoardAccess(boardId: string, userId: string, allowedRoles: BoardRole[] = [BoardRole.OWNER, BoardRole.EDITOR]) {
@@ -76,6 +77,8 @@ export class TaskService {
         }
       }
     });
+
+    await ActivityService.logActivity(column.boardId, userId, 'TASK_CREATED', `Created task "${task.title}"`);
 
     return task;
   }
@@ -280,6 +283,13 @@ export class TaskService {
         })
       ]);
     }
+
+    await ActivityService.logActivity(
+      task.column.boardId,
+      userId,
+      'TASK_MOVED',
+      `Moved task "${task.title}" to column "${targetColumn.name}" at position ${newPosition}`
+    );
 
     return this.getTaskById(taskId, userId);
   }

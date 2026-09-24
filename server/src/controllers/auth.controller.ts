@@ -33,4 +33,17 @@ export class AuthController {
       sendError(res, error.message || 'Failed to retrieve profile', error.statusCode || 400);
     }
   };
+
+  static updateTheme = async (req: Request, res: Response): Promise<void> => {
+    try {
+      if (!req.user) {
+        sendError(res, 'Authentication required', 401);
+        return;
+      }
+      const updatedUser = await AuthService.updateTheme(req.user.id, req.body);
+      sendSuccess(res, updatedUser, 200);
+    } catch (error: any) {
+      sendError(res, error.message || 'Failed to update theme preference', error.statusCode || 400);
+    }
+  };
 }

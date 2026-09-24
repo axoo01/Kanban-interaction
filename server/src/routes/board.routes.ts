@@ -15,6 +15,7 @@ boardRouter.get('/', BoardController.getBoards);
 boardRouter.post('/', validateRequest(createBoardSchema), BoardController.createBoard);
 
 boardRouter.get('/:id', BoardController.getBoardById);
+boardRouter.get('/:id/activities', BoardController.getActivities);
 boardRouter.put('/:id', requireBoardAccess(BoardRole.OWNER, BoardRole.EDITOR), validateRequest(updateBoardSchema), BoardController.updateBoard);
 boardRouter.delete('/:id', requireBoardAccess(BoardRole.OWNER), BoardController.deleteBoard);
 

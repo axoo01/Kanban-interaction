@@ -1,7 +1,7 @@
 import { prisma } from '../config/database.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
 import { generateToken } from '../utils/jwt.js';
-import { RegisterInput, LoginInput } from '../validators/auth.validator.js';
+import { RegisterInput, LoginInput, UpdateThemeInput } from '../validators/auth.validator.js';
 import { AuthUser } from '../types/express.d.js';
 
 export interface AuthResult {
@@ -116,6 +116,20 @@ export class AuthService {
       throw error;
     }
 
+    return user;
+  }
+
+  static async updateTheme(userId: string, input: UpdateThemeInput) {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { themePreference: input.themePreference },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        themePreference: true
+      }
+    });
     return user;
   }
 }

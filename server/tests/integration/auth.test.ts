@@ -72,7 +72,7 @@ describe('Authentication Endpoints (/auth)', () => {
     });
   });
 
-  describe('GET /auth/me', () => {
+  describe('GET /auth/me & PATCH /auth/theme', () => {
     let authToken: string;
 
     beforeAll(async () => {
@@ -97,6 +97,17 @@ describe('Authentication Endpoints (/auth)', () => {
       expect(res.body.status).toBe('success');
       expect(res.body.data.email).toBe(testUser.email);
       expect(res.body.data.fullName).toBe(testUser.fullName);
+    });
+
+    it('should update theme preference (200)', async () => {
+      const res = await request(app)
+        .patch('/auth/theme')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ themePreference: 'light' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('success');
+      expect(res.body.data.themePreference).toBe('light');
     });
   });
 });
