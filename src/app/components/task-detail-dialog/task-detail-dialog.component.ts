@@ -54,8 +54,7 @@ export class TaskDetailDialogComponent implements OnInit {
     const updatedTask = { ...currentTask, status: newStatus };
     this.task.set(updatedTask);
     
-    
-    this.boardService.moveTask(updatedTask, oldStatus, newStatus);
+    this.boardService.moveTaskByStatus(updatedTask.title, oldStatus, newStatus);
     this.isStatusDropdownOpen.set(false);
   }
 

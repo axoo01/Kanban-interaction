@@ -55,9 +55,26 @@
   :host-context(.dark-theme) & { background-color: var(--color-very-dark-grey); }
 
   button {
-    background: none; border: none; text-align: left; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--color-medium-grey);
-    &:hover { opacity: 0.7; }
-    &.delete-text { color: var(--color-red); }
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--color-medium-grey);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-main-purple);
+    }
+
+    &.delete-text {
+      color: var(--color-red);
+
+      &:hover {
+        color: var(--color-red-hover);
+      }
+    }
   }
 }
 

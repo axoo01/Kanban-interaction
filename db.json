@@ -66,6 +66,36 @@
                   "isCompleted": false
                 }
               ]
+            },
+            {
+              "title": "Add authentication endpoints",
+              "description": "",
+              "status": "Todo",
+              "subtasks": [
+                {
+                  "title": "Define user model",
+                  "isCompleted": true
+                },
+                {
+                  "title": "Add auth endpoints",
+                  "isCompleted": false
+                }
+              ]
+            },
+            {
+              "title": "Competitor analysis",
+              "description": "",
+              "status": "Todo",
+              "subtasks": [
+                {
+                  "title": "Find direct and indirect competitors",
+                  "isCompleted": true
+                },
+                {
+                  "title": "SWOT analysis for each competitor",
+                  "isCompleted": true
+                }
+              ]
             }
           ]
         },
@@ -140,21 +170,6 @@
                 },
                 {
                   "title": "Define search filters",
-                  "isCompleted": false
-                }
-              ]
-            },
-            {
-              "title": "Add authentication endpoints",
-              "description": "",
-              "status": "Doing",
-              "subtasks": [
-                {
-                  "title": "Define user model",
-                  "isCompleted": true
-                },
-                {
-                  "title": "Add auth endpoints",
                   "isCompleted": false
                 }
               ]
@@ -251,21 +266,6 @@
               ]
             },
             {
-              "title": "Competitor analysis",
-              "description": "",
-              "status": "Done",
-              "subtasks": [
-                {
-                  "title": "Find direct and indirect competitors",
-                  "isCompleted": true
-                },
-                {
-                  "title": "SWOT analysis for each competitor",
-                  "isCompleted": true
-                }
-              ]
-            },
-            {
               "title": "Research the market",
               "description": "We need to get a solid overview of the market to ensure we have up-to-date estimates of market size and demand.",
               "status": "Done",
@@ -323,25 +323,6 @@
               ]
             },
             {
-              "title": "Share on Show HN",
-              "description": "",
-              "status": "",
-              "subtasks": [
-                {
-                  "title": "Draft out HN post",
-                  "isCompleted": false
-                },
-                {
-                  "title": "Get feedback and refine",
-                  "isCompleted": false
-                },
-                {
-                  "title": "Publish post",
-                  "isCompleted": false
-                }
-              ]
-            },
-            {
               "title": "Write launch article to publish on multiple channels",
               "description": "",
               "status": "",
@@ -368,11 +349,43 @@
         },
         {
           "name": "Doing",
-          "tasks": []
+          "tasks": [
+            {
+              "title": "Break Time",
+              "description": "It's always good to take a break",
+              "status": "Doing",
+              "subtasks": [
+                {
+                  "title": "Take a Juice",
+                  "isCompleted": false
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "Done",
-          "tasks": []
+          "tasks": [
+            {
+              "title": "Share on Show HN",
+              "description": "",
+              "status": "Done",
+              "subtasks": [
+                {
+                  "title": "Draft out HN post",
+                  "isCompleted": true
+                },
+                {
+                  "title": "Get feedback and refine",
+                  "isCompleted": true
+                },
+                {
+                  "title": "Publish post",
+                  "isCompleted": true
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -421,7 +434,23 @@
         },
         {
           "name": "Next",
-          "tasks": []
+          "tasks": [
+            {
+              "title": "Scrum ",
+              "description": "This is the way we're supposed to do things",
+              "status": "Next",
+              "subtasks": [
+                {
+                  "title": "adapting to scrum",
+                  "isCompleted": false
+                },
+                {
+                  "title": "applying scrum",
+                  "isCompleted": false
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "Later",
@@ -430,19 +459,51 @@
       ]
     },
     {
-      "id": "MUzXlL54rcw",
-      "name": "Strategic Launch",
+      "id": "MA3kNoMH4LI",
+      "name": "Strategic Plan",
       "columns": [
         {
           "name": "Todo",
-          "tasks": []
+          "tasks": [
+            {
+              "title": "Reviwing Sprint Backlog",
+              "description": "here we'll just review spring backlog",
+              "status": "Todo",
+              "subtasks": [
+                {
+                  "title": "review sprint",
+                  "isCompleted": false
+                },
+                {
+                  "title": "approve sprint task",
+                  "isCompleted": false
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "Doing",
-          "tasks": []
+          "tasks": [
+            {
+              "title": "User stories",
+              "description": "Going through user stories and and selecting the ones that are supposed to go in sprint backlog",
+              "status": "Doing",
+              "subtasks": [
+                {
+                  "title": "reviewing user stories",
+                  "isCompleted": false
+                },
+                {
+                  "title": "selecting sprint backlog task",
+                  "isCompleted": false
+                }
+              ]
+            }
+          ]
         },
         {
-          "name": "Done",
+          "name": "Sealed",
           "tasks": []
         }
       ]

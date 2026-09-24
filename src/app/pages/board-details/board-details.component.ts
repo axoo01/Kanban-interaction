@@ -1,14 +1,15 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { BoardService } from '../../services/board.service';
 import { CommonModule } from '@angular/common';
 import { DialogService } from '../../services/dialog.service';
-import { Task, Board } from '../../models/board.model'; // Importing your models
-import { map, Observable } from 'rxjs';
+import { Task, Board } from '../../models/board.model';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { CdkDragDrop, CdkDrag, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-board-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CdkDrag, CdkDropList, CdkDropListGroup],
   templateUrl: './board-details.component.html',
   styleUrl: './board-details.component.scss'
 })
@@ -26,8 +27,8 @@ export class BoardDetailsComponent {
     this.boardService.loadBoards();
   }
 
-  // 2. The Board Stream: Connecting the component to the global state
-  board$: Observable<Board | undefined> = this.boardService.currentBoard$;
+  // 2. The Board Signal: Connecting the component to the global state with high performance
+  board = toSignal(this.boardService.currentBoard$);
 
   // --- RESTORED HELPER METHODS ---
 
@@ -51,11 +52,29 @@ export class BoardDetailsComponent {
   }
 
   onAddNewColumn() {
-    // We grab a quick snapshot of the current board to send to the modal
     this.boardService.currentBoard$.subscribe(board => {
       if (board) {
         this.dialogService.openBoardModal('edit', board);
       }
     }).unsubscribe();
+  }
+
+  onTaskDropped(event: CdkDragDrop<Task[]>) {
+    if (
+      event.previousContainer === event.container &&
+      event.previousIndex === event.currentIndex
+    ) {
+      return;
+    }
+
+    const previousColumnName = event.previousContainer.id;
+    const currentColumnName = event.container.id;
+
+    this.boardService.moveTask(
+      previousColumnName,
+      currentColumnName,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 }

@@ -98,10 +98,14 @@ export class LayoutShellComponent implements OnInit {
         onConfirm: () => {
           this.boardService.deleteBoard(currentBoard.name);
           
-          
           this.boardService.boards$.pipe(map(boards => {
-            if (boards.length > 0) {
-              const nextId = boards[0].name.toLowerCase().replace(/ /g, '-');
+            const remainingBoards = boards.filter(b => b.name !== currentBoard.name);
+            const hasPlatformLaunch = remainingBoards.some(b => b.name.toLowerCase() === 'platform launch');
+            
+            if (hasPlatformLaunch) {
+              this.router.navigate(['/boards', 'platform-launch']);
+            } else if (remainingBoards.length > 0) {
+              const nextId = remainingBoards[0].name.toLowerCase().replace(/ /g, '-');
               this.router.navigate(['/boards', nextId]);
             } else {
               this.router.navigate(['/']);

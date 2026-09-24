@@ -61,8 +61,8 @@
   padding: 23px 16px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(54, 78, 126, 0.1);
-  margin-bottom: 20px;
   cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 
   h3 {
     margin: 0 0 8px 0;
@@ -77,9 +77,70 @@
     font-weight: bold;
   }
 
-  &:hover h3 {
-    color: var(--color-main-purple);
+  &:hover {
+    box-shadow: 0 6px 12px rgba(54, 78, 126, 0.15);
+    
+    h3 {
+      color: var(--color-main-purple);
+    }
   }
+}
+
+/* TASK LIST CONTAINER */
+.task-list {
+  min-height: calc(100vh - 260px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+/* CDK DRAG AND DROP PREMIUM STYLING */
+
+/* The floating preview card following the cursor */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  padding: 23px 16px;
+  box-shadow: 0 15px 30px rgba(54, 78, 126, 0.2);
+  cursor: grabbing;
+  opacity: 0.92;
+  transform: scale(1.04) rotate(2deg);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(99, 95, 199, 0.15);
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: var(--color-black);
+  }
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-medium-grey);
+    font-weight: bold;
+  }
+}
+
+/* The dotted drop zone indicator */
+.cdk-drag-placeholder {
+  min-height: 88px;
+  background: rgba(99, 95, 199, 0.04);
+  border: 2px dashed var(--color-main-purple);
+  border-radius: 8px;
+  opacity: 0.8;
+}
+
+/* Shifting cards while dragging over the list */
+.cdk-drag-animating {
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Lists shifting their items to make space */
+.task-list.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) {
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* NEW COLUMN PLACEHOLDER */

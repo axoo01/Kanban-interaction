@@ -199,31 +199,25 @@ export class BoardEffects {
     this.actions$.pipe(
       ofType(BoardActions.moveTask),
       withLatestFrom(this.store.select(selectCurrentBoard)),
-      concatMap(([{ task, oldStatus, newStatus }, board]) => {
+      concatMap(([_, board]) => {
         if (!board || !board.id) {
           return of(BoardActions.moveTaskFailure({ error: 'Active board not found' }));
         }
 
-        const updatedBoard: Board = {
-          ...board,
-          columns: board.columns.map((col) => {
-            if (col.name === oldStatus) {
-              return { ...col, tasks: col.tasks.filter((t) => t.title !== task.title) };
-            }
-            if (col.name === newStatus) {
-              return { ...col, tasks: [...col.tasks, { ...task, status: newStatus }] };
-            }
-            return col;
-          })
-        };
-
-        return this.apiService.updateBoard(board.id, updatedBoard).pipe(
+        return this.apiService.updateBoard(board.id, board).pipe(
           map((savedBoard) => BoardActions.moveTaskSuccess({ board: savedBoard })),
           catchError((error) =>
             of(BoardActions.moveTaskFailure({ error: error.message || 'Failed to move task' }))
           )
         );
       })
+    )
+  );
+
+  moveTaskFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardActions.moveTaskFailure),
+      map(() => BoardActions.loadBoards())
     )
   );
 }
