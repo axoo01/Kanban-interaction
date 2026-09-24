@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "vercel-build": "prisma generate && tsc"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
