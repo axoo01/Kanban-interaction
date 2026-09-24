@@ -65,6 +65,7 @@ export class DialogService {
       if (!confirm) return;
     }
     this.isFormDirty.set(false);
+    this.dialogState.set({ isOpen: false, type: 'task', mode: 'add' });
     this.router.navigate([], {
       queryParams: { modal: null, task: null },
       queryParamsHandling: 'merge'

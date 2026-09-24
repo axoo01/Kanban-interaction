@@ -28,7 +28,6 @@ export const boardReducer = createReducer(
     BoardActions.addTask,
     BoardActions.updateTask,
     BoardActions.deleteTask,
-    BoardActions.moveTask,
     (state): BoardState => ({
       ...state,
       isLoading: true,
@@ -95,5 +94,45 @@ export const boardReducer = createReducer(
       boards: state.boards.map((b: Board) => b.id === board.id ? board : b),
       isLoading: false
     })
-  )
+  ),
+
+  on(BoardActions.moveTask, (state, { previousColumnName, currentColumnName, previousIndex, currentIndex }): BoardState => {
+    const activeBoard = state.boards.find(b => 
+      b.id === state.activeBoardId || 
+      b.name.toLowerCase().replace(/ /g, '-') === state.activeBoardId
+    );
+    if (!activeBoard) return state;
+
+    const updatedColumns = activeBoard.columns.map((col: Column): Column => {
+      if (col.name === previousColumnName && col.name === currentColumnName) {
+        const tasks = [...col.tasks];
+        const [movedTask] = tasks.splice(previousIndex, 1);
+        if (movedTask) {
+          tasks.splice(currentIndex, 0, movedTask);
+        }
+        return { ...col, tasks };
+      } else if (col.name === previousColumnName) {
+        const tasks = [...col.tasks];
+        tasks.splice(previousIndex, 1);
+        return { ...col, tasks };
+      } else if (col.name === currentColumnName) {
+        const tasks = [...col.tasks];
+        const previousCol = activeBoard.columns.find(c => c.name === previousColumnName);
+        const movedTask = previousCol ? previousCol.tasks[previousIndex] : null;
+        if (movedTask) {
+          tasks.splice(currentIndex, 0, { ...movedTask, status: currentColumnName });
+        }
+        return { ...col, tasks };
+      }
+      return col;
+    });
+
+    const updatedBoard: Board = { ...activeBoard, columns: updatedColumns };
+
+    return {
+      ...state,
+      boards: state.boards.map((b: Board) => b.id === activeBoard.id ? updatedBoard : b),
+      error: null
+    };
+  })
 );

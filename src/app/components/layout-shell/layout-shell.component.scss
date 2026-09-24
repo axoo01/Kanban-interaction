@@ -316,9 +316,18 @@
     font-weight: 500;
     cursor: pointer;
     color: var(--color-medium-grey);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-main-purple);
+    }
 
     &.delete-text {
       color: var(--color-red);
+
+      &:hover {
+        color: var(--color-red-hover);
+      }
     }
   }
 }

@@ -54,8 +54,24 @@ export class BoardService {
     this.store.dispatch(BoardActions.deleteTask({ taskTitle, columnStatus }));
   }
 
-  moveTask(task: Task, oldStatus: string, newStatus: string) {
-    this.store.dispatch(BoardActions.moveTask({ task, oldStatus, newStatus }));
+  moveTask(previousColumnName: string, currentColumnName: string, previousIndex: number, currentIndex: number) {
+    this.store.dispatch(BoardActions.moveTask({ previousColumnName, currentColumnName, previousIndex, currentIndex }));
+  }
+
+  moveTaskByStatus(taskTitle: string, oldStatus: string, newStatus: string) {
+    this.currentBoard$.subscribe(board => {
+      if (!board) return;
+      const prevCol = board.columns.find(c => c.name === oldStatus);
+      const targetCol = board.columns.find(c => c.name === newStatus);
+      if (!prevCol || !targetCol) return;
+
+      const previousIndex = prevCol.tasks.findIndex(t => t.title === taskTitle);
+      const currentIndex = targetCol.tasks.length; // Append to end
+
+      if (previousIndex !== -1) {
+        this.moveTask(oldStatus, newStatus, previousIndex, currentIndex);
+      }
+    }).unsubscribe();
   }
 
   private formatTask(formValue: any): Task {

@@ -38,7 +38,7 @@ export const BoardActions = createActionGroup({
     'Delete Task Success': props<{ board: Board }>(),
     'Delete Task Failure': props<{ error: string }>(),
 
-    'Move Task': props<{ task: Task; oldStatus: string; newStatus: string }>(),
+    'Move Task': props<{ previousColumnName: string; currentColumnName: string; previousIndex: number; currentIndex: number }>(),
     'Move Task Success': props<{ board: Board }>(),
     'Move Task Failure': props<{ error: string }>()
   }
