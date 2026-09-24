@@ -28,6 +28,6 @@ export const selectCurrentBoard = createSelector(
   selectAllBoards,
   selectActiveBoardId,
   (boards: Board[], activeId: string): Board | undefined => boards.find(
-    (b: Board) => b.name.toLowerCase().replace(/ /g, '-') === activeId
+    (b: Board) => b.id === activeId || b.name.toLowerCase().replace(/ /g, '-') === activeId
   )
 );

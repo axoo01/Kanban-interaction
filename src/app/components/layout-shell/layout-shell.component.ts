@@ -3,13 +3,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/rou
 import { ThemeService } from '../../services/theme.service';
 import { DialogService } from '../../services/dialog.service';
 import { BoardService } from '../../services/board.service';
+import { AuthService } from '../../services/auth.service';
+import { AuthDialogComponent } from '../auth-dialog/auth-dialog.component';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs';
 
 @Component({
   selector: 'app-layout-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, AuthDialogComponent],
   templateUrl: './layout-shell.component.html',
   styleUrl: './layout-shell.component.scss'
 })
@@ -18,16 +20,14 @@ export class LayoutShellComponent implements OnInit {
   private dialogService = inject(DialogService);
   private router = inject(Router);
   public boardService = inject(BoardService); 
+  public authService = inject(AuthService);
 
-  
   boards$ = this.boardService.boards$;
-  
   
   headerTitle$ = this.boardService.currentBoard$.pipe(
     map(board => board?.name || 'Platform Launch')
   );
 
-  
   isDarkMode = this.themeService.darkMode;
   isSidebarHidden = signal(false);
   isOptionsMenuOpen = signal(false);
@@ -68,6 +68,11 @@ export class LayoutShellComponent implements OnInit {
     this.themeService.toggleTheme();
   }
 
+  onLogout() {
+    this.authService.logout();
+    this.isOptionsMenuOpen.set(false);
+  }
+
   openAddTask() {
     this.dialogService.openTaskModal('add');
   }
@@ -77,10 +82,7 @@ export class LayoutShellComponent implements OnInit {
     this.dialogService.openBoardModal('add');
   }
 
-  
-
   openEditBoard() {
-    
     this.boardService.currentBoard$.pipe(map(board => {
       if (board) this.dialogService.openBoardModal('edit', board);
     })).subscribe().unsubscribe(); 

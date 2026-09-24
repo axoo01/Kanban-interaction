@@ -91,7 +91,7 @@ export const boardReducer = createReducer(
     BoardActions.moveTaskSuccess,
     (state, { board }): BoardState => ({
       ...state,
-      boards: state.boards.map((b: Board) => b.id === board.id ? board : b),
+      boards: state.boards.map((b: Board) => (b.id === board.id || b.name === board.name) ? board : b),
       isLoading: false
     })
   ),

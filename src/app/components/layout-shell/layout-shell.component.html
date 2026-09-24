@@ -1,5 +1,9 @@
 <div class="app-container" [class.sidebar-hidden]="isSidebarHidden()">
 
+  @if (!authService.isAuthenticated()) {
+    <app-auth-dialog />
+  }
+
   <aside class="sidebar" role="navigation">
     <div class="logo-container">
       <img [src]="isDarkMode() ? '/assets/logo-light.svg' : '/assets/logo-dark.svg'" alt="Kanban Logo" class="logo">
@@ -26,6 +30,16 @@
     </div>
 
     <div class="sidebar-footer">
+      @if (authService.currentUser(); as user) {
+        <div class="user-badge-sidebar">
+          <span class="user-avatar">{{ user.fullName.charAt(0).toUpperCase() }}</span>
+          <div class="user-info">
+            <span class="user-name">{{ user.fullName }}</span>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+        </div>
+      }
+
       <div class="theme-toggle">
         <img src="/assets/icon-light-theme.svg" alt="Light Theme">
         <div class="toggle-switch" (click)="toggleTheme()" [class.active]="isDarkMode()">
@@ -33,6 +47,7 @@
         </div>
         <img src="/assets/icon-dark-theme.svg" alt="Dark Theme">
       </div>
+
       <button class="hide-sidebar-btn" (click)="toggleSidebar()">
         <img src="/assets/icon-hide-sidebar.svg" alt="">
         Hide Sidebar
@@ -61,6 +76,17 @@
           </button>
         </li>
       </ul>
+
+      @if (authService.currentUser(); as user) {
+        <div class="user-badge-sidebar" style="margin: 16px 0 8px 0;">
+          <span class="user-avatar">{{ user.fullName.charAt(0).toUpperCase() }}</span>
+          <div class="user-info">
+            <span class="user-name">{{ user.fullName }}</span>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+        </div>
+      }
+
       <div class="theme-toggle-mobile">
         <img src="/assets/icon-light-theme.svg" alt="">
         <div class="toggle-switch" (click)="toggleTheme()" [class.active]="isDarkMode()">
@@ -96,6 +122,7 @@
           <div class="options-dropdown">
             <button (click)="openEditBoard()">Edit Board</button>
             <button class="delete-text" (click)="onDeleteBoard()">Delete Board</button>
+            <button class="delete-text" (click)="onLogout()">Sign Out</button>
           </div>
           }
         </div>
