@@ -44,7 +44,7 @@ kanban-task-mgt-interaction/
 ## Live Deployment & Cloud Infrastructure
 
 * **Cloud Database:** Neon PostgreSQL (`ep-misty-waterfall-b56zqq0f`)
-* **Backend Serverless API (Vercel):** `https://<your-backend-app>.vercel.app` *(Placeholder - ready for deployment)*
+* **Backend Serverless API (Vercel):** `https://kanban-backend-api-nine.vercel.app`
 * **Frontend Angular Client (Vercel):** `https://<your-frontend-app>.vercel.app` *(Placeholder - ready for deployment)*
 
 ### Live Demo Credentials
