@@ -4,6 +4,8 @@ import { pinoHttp } from 'pino-http';
 import { logger } from './utils/logger.js';
 import { sendSuccess } from './utils/response.js';
 import { authRouter } from './routes/auth.routes.js';
+import { boardRouter } from './routes/board.routes.js';
+import { columnRouter } from './routes/column.routes.js';
 
 export const app = express();
 
@@ -19,6 +21,8 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/boards', boardRouter);
+app.use('/columns', columnRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ status: 'error', message: 'Route not found' });
